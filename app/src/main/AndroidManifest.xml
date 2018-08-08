@@ -16,6 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SplashScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".ParkingScreen" />
+        <activity android:name=".SafetyScreen" />
+        <activity android:name=".Safety2Screen" />
+        <activity android:name=".HowToRideScreen" />
+        <activity android:name=".HowToRide2Screen" />
+        <activity android:name=".EndingTripScreen" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
