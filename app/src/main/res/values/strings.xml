@@ -7,4 +7,12 @@
     <string name="safety_message2">Want your own free personal Bee helmet? Contact us so we can send one to your address free of charge.</string>
     <string name="steps_message">Step 1: Kick start three times to start moving\n\nStep 2: Then push the throttle button on the right handle with your thumb</string>
     <string name="find_unlock"><![CDATA[Find & unlock]]></string>
+    <string name="title_activity_main_screen">Map</string>
+    <string name="title_activity_navigate">navigate</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>
