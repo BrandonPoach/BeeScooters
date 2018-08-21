@@ -2,6 +2,7 @@ package com.csit321mf03aproject.beescooters;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,6 +14,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    //private DrawerLayout myDrawer;
+    //private ActionBarDrawerToggle myToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,4 +46,6 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/acc_icon"
+        android:title="Account" />
+    <item
+        android:icon="@drawable/payment_icon"
+        android:title="Payment" />
+    <item android:title="Ride History"/>
+
+    <item android:title="How To Ride" />
+    <item android:title="Safety"
+        android:icon="@drawable/safety_icon"/>
+    <item android:title="Become a Charger"
+          android:icon="@drawable/charger_icon"/>
+</menu>
