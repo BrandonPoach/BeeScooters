@@ -2,6 +2,8 @@ package com.csit321mf03aproject.beescooters;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,6 +15,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private DrawerLayout myDrawer;
+    private ActionBarDrawerToggle myToggle;
+
+    //private DrawerLayout myDrawer;
+    //private ActionBarDrawerToggle myToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +29,29 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+/*      myDrawer = (DrawerLayout) findViewById(R.id.myDrawer);
+        myToggle = new ActionBarDrawerToggle(this,myDrawer,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+
+        myDrawer.addDrawerListener(myToggle);
+        myToggle.syncState();
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
+*/
     }
+
+/*   @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        if (myToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+*/
+
 
 
     /**
@@ -43,4 +72,6 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
+
+
 }
