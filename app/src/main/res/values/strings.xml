@@ -17,6 +17,10 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_login_screen">Sign in</string>
 
+    <!-- String related to QR Code Screen -->
+    <string name="result_text_default">Focus Camera on QR Code Located on the Scooter Handle</string>
+    <string name="scanner_not_working_text">If QR Code can\'t be Scanned. Please Close and Relaunch the Application.</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
