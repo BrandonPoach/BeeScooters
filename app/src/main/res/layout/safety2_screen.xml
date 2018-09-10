@@ -40,8 +40,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
         android:fontFamily="@font/montserrat"
         android:text="It is very important that all users wear a helmet and ride in bike lanes all the time"
         android:textAlignment="center"
@@ -53,9 +53,9 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="0dp"
+        android:layout_width="100dp"
         android:layout_height="45dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="#fef232"

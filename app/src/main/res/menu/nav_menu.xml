@@ -8,9 +8,12 @@
     <item
         android:icon="@drawable/payment_icon"
         android:title="Payment" />
-    <item android:title="Ride History"/>
+    <item android:title="Ride History"
+            android:icon="@drawable/ride_history" />
 
-    <item android:title="How To Ride" />
+    <item android:title="How To Ride"
+            android:icon="@drawable/howtoride_icon"/>
+
     <item android:title="Safety"
         android:icon="@drawable/safety_icon"/>
     <item android:title="Become a Charger"
