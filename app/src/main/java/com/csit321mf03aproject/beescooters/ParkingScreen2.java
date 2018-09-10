@@ -6,27 +6,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class Safety2Screen extends AppCompatActivity{
+public class ParkingScreen2 extends AppCompatActivity{
 
     private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.safety2_screen);
+        setContentView(R.layout.parking_screen2);
 
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openParkingScreen2();
+                openParkingScreen();
             }
         });
     }
 
-    public void openParkingScreen2(){
+    public void openParkingScreen(){
 
-        Intent intent = new Intent(this, ParkingScreen2.class);
+        Intent intent = new Intent(this, ParkingScreen.class);
         startActivity(intent);
 
     }
