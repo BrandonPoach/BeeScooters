@@ -27,7 +27,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SplashScreen">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".MainScreen" />
         <activity android:name=".ParkingScreen" />
@@ -38,15 +41,12 @@
         <activity android:name=".EndingTripScreen" />
         <activity android:name=".CCInfoScreen" />
         <activity android:name=".QRCodeScannerScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity android:name=".LoginScreen"
             android:label="@string/title_activity_login_screen"/>
+        <activity android:name=".LoggingIn" />
+        <activity android:name=".Register" />
 
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">

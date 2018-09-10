@@ -19,17 +19,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+
 import java.nio.Buffer;
 
 import javax.net.ssl.HttpsURLConnection;
 
-/**
- * Created by Mitch on 2016-06-04.
- */
 public class BackgroundTask extends AsyncTask<String,Void,String> {
 
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     Context context;
 
@@ -43,16 +41,18 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         preferences = context.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         editor = preferences.edit();
         editor.putString("flag","0");
-        editor.commit();
+        editor.apply();
 
         String urlRegistration = "http://beescooters.net/LoginAndRegister-register.php";
         String urlLogin  = "http://beescooters.net/LoginAndRegister-login.php";
         String task = params[0];
 
         if(task.equals("register")){
-            String regName = params[1];
-            String regEmail = params[2];
-            String regPassword = params[3];
+            String regUsername = params[1];
+            String regFirstName = params[2];
+            String regLastName = params[3];
+            String regEmail = params[4];
+            String regPassword = params[5];
 
             try {
                 URL url = new URL(urlRegistration);
@@ -62,7 +62,10 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream,"UTF-8");
                 BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
-                String myData = URLEncoder.encode("identifier_name","UTF-8")+"="+URLEncoder.encode(regName,"UTF-8")+"&"
+                String myData = URLEncoder.encode("identifier_name","UTF-8")+"="+URLEncoder.encode(regUsername,"UTF-8")+"&"
+                        +URLEncoder.encode("identifier_given","UTF-8")+"="+URLEncoder.encode(regFirstName,"UTF-8")+"&"
+                        +URLEncoder.encode("identifier_family","UTF-8")+"="+URLEncoder.encode(regLastName,"UTF-8")+"&"
+                        +URLEncoder.encode("identifier_type","UTF-8")+"="+URLEncoder.encode("normal","UTF-8")+"&"
                         +URLEncoder.encode("identifier_email","UTF-8")+"="+URLEncoder.encode(regEmail,"UTF-8")+"&"
                         +URLEncoder.encode("identifier_password","UTF-8")+"="+URLEncoder.encode(regPassword,"UTF-8");
                 bufferedWriter.write(myData);
@@ -73,7 +76,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
 
                 editor.putString("flag","register");
                 editor.commit();
-                return "Successfully Registered " + regName;
+                return "Successfully Registered " + regUsername;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -102,20 +105,22 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 bufferedWriter.close();
                 outputStream.close();
 
-                //get response from the database
+                int num = httpURLConnection.getResponseCode();
+                System.out.println(num);
+
                 InputStream inputStream = httpURLConnection.getInputStream();
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream,"UTF-8");
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String dataResponse = "";
-                String inputLine = "";
+                String inputLine;
                 while((inputLine = bufferedReader.readLine()) != null){
                     dataResponse += inputLine;
                 }
                 bufferedReader.close();
                 inputStream.close();
+
                 httpURLConnection.disconnect();
 
-                System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 System.out.println(dataResponse);
 
                 editor.putString("flag","login");
@@ -137,7 +142,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         super.onPreExecute();
     }
 
-    //This method willbe called when doInBackground completes... and it will return the completion string which
+    //This method will be called when doInBackground completes... and it will return the completion string which
     //will display this toast.
     @Override
     protected void onPostExecute(String s) {
@@ -163,10 +168,10 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 Intent intent = new Intent(context,LoggingIn.class);
                 context.startActivity(intent);
             }else{
-                display("Login Failed...", "That email and password do not match our records :(.");
+                display("Login Failed", "That email and password do not match our records.");
             }
         }else{
-            display("Login Failed...","Something weird happened :(.");
+            display ("Login Failed", flag);
         }
     }
 
@@ -175,7 +180,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         super.onProgressUpdate(values);
     }
 
-    public void display(String title, String message){
+    private void display(String title, String message){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(true);
         builder.setTitle(title);

@@ -8,28 +8,32 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Register  extends AppCompatActivity {
-    EditText etName, etEmail, etPassword;
-    String name, email, password;
+    EditText etUsername, etFirstName, etLastName, etEmail, etPassword;
+    String username, firstName, lastName, email, password;
     Button btnRegister;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_screen);
-        etName = (EditText) findViewById(R.id.etNewName);
-        etEmail = (EditText) findViewById(R.id.etNewEmail);
-        etPassword = (EditText) findViewById(R.id.etNewPassword);
-        btnRegister = (Button) findViewById(R.id.btnNewRegister);
+        etUsername = findViewById(R.id.etNewUsername);
+        etFirstName = findViewById(R.id.etNewFirstName);
+        etLastName = findViewById(R.id.etNewLastName);
+        etEmail = findViewById(R.id.etNewEmail);
+        etPassword = findViewById(R.id.etNewPassword);
+        btnRegister = findViewById(R.id.btnNewRegister);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                name = etName.getText().toString();
+                username = etUsername.getText().toString();
+                firstName = etFirstName.getText().toString();
+                lastName = etLastName.getText().toString();
                 email = etEmail.getText().toString();
                 password = etPassword.getText().toString();
                 String task = "register";
                 BackgroundTask backgroundTask = new BackgroundTask(Register.this);
-                backgroundTask.execute(task,name, email, password);
+                backgroundTask.execute(task,username, firstName, lastName, email, password);
                 finish();
             }
         });
