@@ -114,7 +114,7 @@ public class CCInfoScreen extends AppCompatActivity {
            else
            {
                Exception error = (Exception)data.getSerializableExtra(DropInActivity.EXTRA_ERROR);
-               Log.d("EDMT_ERROR", error.toString());
+               Log.d("BEE_ERROR", error.toString());
            }
        }
     }
@@ -125,26 +125,25 @@ public class CCInfoScreen extends AppCompatActivity {
     //function to send payments  to my server
     private void sendPayments() {
         RequestQueue queue = Volley.newRequestQueue(CCInfoScreen.this);
-        Log.d("EDMT_LOG", "Testing1234");
+        Log.d("BEE_LOG", "Testing1");
         //send request to checkout.php
         StringRequest stringRequest = new StringRequest(Request.Method.POST, API_CHECK_OUT,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("EDMT_LOG", "llllllllllllll");
-                        Log.d("EDMT_LOG", response.toString());
+                        Log.d("BEE_LOG", response.toString());
                         //received approval
                         if (response.toString().contains("Successful")) {
                             Toast.makeText(CCInfoScreen.this, "Transaction Successful!", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(CCInfoScreen.this, "Transaction Failed!", Toast.LENGTH_SHORT).show();
                         }
-                        Log.d("EDMT_LOG", response.toString());
+                        Log.d("BEE_LOG", response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("EDMT_LOG", error.toString());
+                Log.d("BEE_LOG", error.toString());
             }
         })
         {
@@ -179,7 +178,7 @@ public class CCInfoScreen extends AppCompatActivity {
 
         //add request to queue
         queue.add(stringRequest);
-        Log.d("EDMT_LOG", stringRequest.toString());
+        Log.d("BEE_LOG", stringRequest.toString());
     }
 
     private class getToken extends AsyncTask{
@@ -220,7 +219,7 @@ public class CCInfoScreen extends AppCompatActivity {
                 //couldn't connect to main.php to get token
                 @Override
                 public void failure(Exception exception) {
-                    Log.d("EDMT_ERROR", exception.toString());
+                    Log.d("BEE_ERROR", exception.toString());
                 }
             });
             return null;
