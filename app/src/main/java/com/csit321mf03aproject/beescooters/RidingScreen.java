@@ -1,5 +1,6 @@
 package com.csit321mf03aproject.beescooters;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +23,7 @@ public class RidingScreen extends AppCompatActivity {
 
         startLockButton = findViewById(R.id.start_lock_button);
         chronometer = findViewById(R.id.chronometer);
-        chronometer.setFormat("Time Elapsed: %s");
+        //chronometer.setFormat("Time Elapsed: %s");
         chronometer.setBase(SystemClock.elapsedRealtime());
 
         startLockButton.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +56,16 @@ public class RidingScreen extends AppCompatActivity {
     {
         chronometer.stop();
         long elapsedMillis = SystemClock.elapsedRealtime() - chronometer.getBase();
-        Toast.makeText(RidingScreen.this, "Elapsed milliseconds: " + elapsedMillis,
-                    Toast.LENGTH_SHORT).show();//goto payment screen or etc
+        elapsedMillis = elapsedMillis/1000;
+
+        int elapsedSeconds = (int)elapsedMillis;
+        Toast.makeText(RidingScreen.this, "Elapsed seconds: " + elapsedSeconds,
+                Toast.LENGTH_SHORT).show();
+
+
+        //goto payment screen and pass the time elapsed
+        Intent intent  = new Intent (this, CCInfoScreen.class);
+        intent.putExtra("PAYMENT_VALUE", elapsedSeconds);
+        startActivity(intent);
     }
 }

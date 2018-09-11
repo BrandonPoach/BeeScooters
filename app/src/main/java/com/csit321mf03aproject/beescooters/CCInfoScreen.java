@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -40,9 +41,10 @@ public class CCInfoScreen extends AppCompatActivity {
     String scooterID = "scooter003";    //testing
     String tripTime = "444";    //testing
     HashMap<String, String> paramHash;
-
+    int payment_amount = 0;
     Button btn_pay;
-    EditText edt_amount;
+    //EditText edt_amount;
+    TextView payment_text;
     LinearLayout group_waiting, group_payment;
 
     @Override
@@ -50,11 +52,22 @@ public class CCInfoScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cc_info_screen);
 
+        //retrieving amount passed from Riding screen
+
+        Bundle pymnt_amount = getIntent().getExtras();
+        if(pymnt_amount == null) {
+            payment_amount = 0;
+        } else {
+            payment_amount = pymnt_amount.getInt("PAYMENT_VALUE");
+        }
+
         group_payment = (LinearLayout)findViewById(R.id.payment_group);
         group_waiting = (LinearLayout)findViewById(R.id.waiting_group);
 
         btn_pay = (Button)findViewById(R.id.btn_pay);
-        edt_amount = (EditText)findViewById(R.id.edt_amount);
+        payment_text = findViewById(R.id.txt_amount);
+        payment_text.setText(String.valueOf(payment_amount));
+        //edt_amount = (EditText)findViewById(R.id.edt_amount);
 
         new getToken().execute();
 
@@ -87,10 +100,11 @@ public class CCInfoScreen extends AppCompatActivity {
                PaymentMethodNonce nonce = result.getPaymentMethodNonce();
                String strNonce = nonce.getNonce();  //nonce from Braintree server
                 //user entered value
-               if (!edt_amount.getText().toString().isEmpty())
-               {
+
+               //if (!edt_amount.getText().toString().isEmpty())
+               //{
                    //assigned user entered values to variables
-                   amount = edt_amount.getText().toString();
+                   amount = Integer.toString(payment_amount);   //edt_amount.getText().toString();
                    paramHash = new HashMap<>();
                    paramHash.put("amount", amount);
                    paramHash.put("nonce", strNonce);
@@ -98,12 +112,12 @@ public class CCInfoScreen extends AppCompatActivity {
                    paramHash.put("scooterID", scooterID);
                    paramHash.put("tripTime", tripTime);
                    sendPayments();
-               }
+               //}
                 //users did not enter a valid amount
-               else
-               {
-                   Toast.makeText(this, "Please enter valid amount", Toast.LENGTH_SHORT).show();
-               }
+               //else
+               //{
+               //    Toast.makeText(this, "Please enter valid amount", Toast.LENGTH_SHORT).show();
+               //}
            }
 
            else if (resultCode == RESULT_CANCELED)
@@ -122,7 +136,7 @@ public class CCInfoScreen extends AppCompatActivity {
     //need to add code to save user payment method
     //https://github.com/braintree/braintree-android-drop-in
 
-    //function to send payments  to my server
+    //function to send payments to my server
     private void sendPayments() {
         RequestQueue queue = Volley.newRequestQueue(CCInfoScreen.this);
         Log.d("BEE_LOG", "Testing1");

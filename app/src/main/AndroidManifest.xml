@@ -25,8 +25,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen" />
-        <activity android:name=".MainScreen" />
+        <activity android:name=".SplashScreen">
+
+        </activity>
+        <activity android:name=".MainScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ParkingScreen" />
         <activity android:name=".SafetyScreen" />
         <activity android:name=".Safety2Screen" />
@@ -34,13 +41,9 @@
         <activity android:name=".HowToRide2Screen" />
         <activity android:name=".EndingTripScreen" />
         <activity android:name=".CCInfoScreen" />
-        <activity android:name=".QRCodeScannerScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".QRCodeScannerScreen" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
         <activity
             android:name=".LoginScreen"
             android:label="@string/title_activity_login_screen" />
@@ -76,7 +79,14 @@
             android:value="barcode" />
 
         <activity android:name=".ScanCode" />
-        <activity android:name=".ParkingScreen2"></activity>
+        <activity android:name=".ParkingScreen2" />
+
+        <activity android:name=".RidingScreen">
+
+
+        </activity>
+
+
     </application>
 
 </manifest>

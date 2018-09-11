@@ -36,9 +36,7 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
 
         myDrawer.addDrawerListener(myToggle);
         myToggle.syncState();
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
-
 */
     }
 
@@ -51,8 +49,6 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
         return super.onOptionsItemSelected(item);
     }
 */
-
-
 
     /**
      * Manipulates the map once available.
@@ -69,9 +65,9 @@ public class MainScreen extends FragmentActivity implements OnMapReadyCallback {
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
+//        mMap.setMinZoomPreference(15f);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
-
 
 }

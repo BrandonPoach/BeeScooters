@@ -137,7 +137,7 @@ public class QRCodeScannerScreen extends AppCompatActivity {
                             txtResult.setText(qrCode.valueAt(0).displayValue);
 
                             //code to change activity screens
-                            //Intent intent  = new Intent (QRCodeScannerScreen.this, CCInfoScreen.class);
+                            //Intent intent  = new Intent (QRCodeScannerScreen.this, MainScreen.class);
                             //startActivity(intent);
                         }
                     });

@@ -56,7 +56,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/QR" />
+        app:srcCompat="@drawable/qr_code" />
 
 
 
