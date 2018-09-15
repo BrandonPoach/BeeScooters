@@ -7,16 +7,23 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
+
+    package="com.example.currentplacedetailsonmap">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Permissions for QR Code Scanning -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- For Job Scheduler -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -25,7 +32,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen">
+
+
+        <activity android:name=".SplashScreen"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".MainScreen">
@@ -40,22 +50,29 @@
         <activity android:name=".HowToRideScreen" />
         <activity android:name=".HowToRide2Screen" />
         <activity android:name=".EndingTripScreen" />
-        <activity android:name=".CCInfoScreen" />
-        <activity android:name=".QRCodeScannerScreen" />
+        <activity android:name=".Payment_Screen" />
+        <activity android:name=".QRCodeScannerScreen">
+        </activity>
 
 
-        <activity
-            android:name=".LoginScreen"
-            android:label="@string/title_activity_login_screen" />
-        <activity
-            android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
+        <activity android:name=".RidingScreen">
+
+        </activity>
+        <service
+            android:name=".ChronometerJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <activity android:name=".LoginScreen"
+            android:label="@string/title_activity_login_screen"/>
+        <activity android:name=".LoggingIn" />
+        <activity android:name=".Register" />
+
+        <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="${applicationId}.braintree" />
             </intent-filter>
         </activity>
@@ -74,19 +91,12 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />
 
-        <activity android:name=".ScanCode" />
-        <activity android:name=".ParkingScreen2" />
-
-        <activity android:name=".RidingScreen">
-
-
-        </activity>
-
-
+        <service android:name=".RidingScreen$TimerService" />
     </application>
 
 </manifest>

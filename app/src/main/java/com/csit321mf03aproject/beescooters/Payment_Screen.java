@@ -4,11 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +30,7 @@ import com.braintreepayments.api.models.PaymentMethodNonce;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CCInfoScreen extends AppCompatActivity {
+public class Payment_Screen extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1234;
     final String API_GET_TOKEN = "http://beescooters.net/admin/main.php";
@@ -41,32 +41,33 @@ public class CCInfoScreen extends AppCompatActivity {
     String scooterID = "scooter003";    //testing
     String tripTime = "444";    //testing
     HashMap<String, String> paramHash;
-    int payment_amount = 0;
+    int payment_amount;
     Button btn_pay;
     //EditText edt_amount;
     TextView payment_text;
-    LinearLayout group_waiting, group_payment;
+    LinearLayout group_waiting;
+    ConstraintLayout group_payment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cc_info_screen);
+        setContentView(R.layout.payment_screen);
 
-        //retrieving amount passed from Riding screen
-
-        Bundle pymnt_amount = getIntent().getExtras();
-        if(pymnt_amount == null) {
+        //retrieving trip time from Riding screen
+        Bundle trip_time = getIntent().getExtras();
+        if(trip_time == null) {
             payment_amount = 0;
         } else {
-            payment_amount = pymnt_amount.getInt("PAYMENT_VALUE");
+            payment_amount = trip_time.getInt("TRIP_TIME") ;
+            //set payment cost plan here later
         }
 
-        group_payment = (LinearLayout)findViewById(R.id.payment_group);
-        group_waiting = (LinearLayout)findViewById(R.id.waiting_group);
+        group_payment = findViewById(R.id.payment_group);
+        group_waiting = findViewById(R.id.waiting_group);
 
         btn_pay = (Button)findViewById(R.id.btn_pay);
         payment_text = findViewById(R.id.txt_amount);
-        payment_text.setText(String.valueOf(payment_amount));
+        payment_text.setText(String.valueOf(payment_amount) + " AUD");
         //edt_amount = (EditText)findViewById(R.id.edt_amount);
 
         new getToken().execute();
@@ -138,7 +139,7 @@ public class CCInfoScreen extends AppCompatActivity {
 
     //function to send payments to my server
     private void sendPayments() {
-        RequestQueue queue = Volley.newRequestQueue(CCInfoScreen.this);
+        RequestQueue queue = Volley.newRequestQueue(Payment_Screen.this);
         Log.d("BEE_LOG", "Testing1");
         //send request to checkout.php
         StringRequest stringRequest = new StringRequest(Request.Method.POST, API_CHECK_OUT,
@@ -148,9 +149,9 @@ public class CCInfoScreen extends AppCompatActivity {
                         Log.d("BEE_LOG", response.toString());
                         //received approval
                         if (response.toString().contains("Successful")) {
-                            Toast.makeText(CCInfoScreen.this, "Transaction Successful!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Payment_Screen.this, "Transaction Successful!", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(CCInfoScreen.this, "Transaction Failed!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Payment_Screen.this, "Transaction Failed!", Toast.LENGTH_SHORT).show();
                         }
                         Log.d("BEE_LOG", response.toString());
                     }
@@ -204,7 +205,7 @@ public class CCInfoScreen extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mDialog = new ProgressDialog (CCInfoScreen.this,android.R.style.Theme_DeviceDefault_Dialog);
+            mDialog = new ProgressDialog (Payment_Screen.this,android.R.style.Theme_DeviceDefault_Dialog);
             mDialog.setCancelable(false);
             mDialog.setMessage("Please wait");
             mDialog.show();

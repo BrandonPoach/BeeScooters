@@ -1,15 +1,13 @@
 package com.csit321mf03aproject.beescooters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-/**
- * Created by Mitch on 2016-06-04.
- */
 public class LoggingIn extends AppCompatActivity {
     TextView name,email;
     SharedPreferences preferences;
@@ -27,5 +25,19 @@ public class LoggingIn extends AppCompatActivity {
         String mEmail = preferences.getString("email","ERROR getting email");
         name.setText(mName);
         email.setText(mEmail);
+        Thread myThread = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    sleep(4000);
+                    Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                    startActivity(intent);
+                    finish();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        myThread.start();
     }
 }
