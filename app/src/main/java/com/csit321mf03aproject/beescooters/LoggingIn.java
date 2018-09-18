@@ -29,8 +29,9 @@ public class LoggingIn extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    sleep(4000);
+                    sleep(3000);
                     Intent intent = new Intent(getApplicationContext(), MainScreen.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 } catch (InterruptedException e) {

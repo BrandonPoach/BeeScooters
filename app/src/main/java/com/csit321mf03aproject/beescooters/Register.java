@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Register  extends AppCompatActivity {
-    EditText etUsername, etFirstName, etLastName, etEmail, etPassword;
-    String username, firstName, lastName, email, password;
+    EditText etUsername, etFirstName, etLastName, etEmail, etAddress, etPassword;
+    String username, firstName, lastName, email, address, password;
     Button btnRegister;
 
     @Override
@@ -20,6 +20,7 @@ public class Register  extends AppCompatActivity {
         etFirstName = findViewById(R.id.etNewFirstName);
         etLastName = findViewById(R.id.etNewLastName);
         etEmail = findViewById(R.id.etNewEmail);
+        etAddress = findViewById(R.id.etNewAddress);
         etPassword = findViewById(R.id.etNewPassword);
         btnRegister = findViewById(R.id.btnNewRegister);
 
@@ -30,10 +31,11 @@ public class Register  extends AppCompatActivity {
                 firstName = etFirstName.getText().toString();
                 lastName = etLastName.getText().toString();
                 email = etEmail.getText().toString();
+                address = etAddress.getText().toString();
                 password = etPassword.getText().toString();
                 String task = "register";
                 BackgroundTask backgroundTask = new BackgroundTask(Register.this);
-                backgroundTask.execute(task,username, firstName, lastName, email, password);
+                backgroundTask.execute(task,username, firstName, lastName, email, address, password);
                 finish();
             }
         });

@@ -1,6 +1,7 @@
 package com.csit321mf03aproject.beescooters;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ public class LoginScreen extends AppCompatActivity  {
     Button btnRegister, btnLogin;
     EditText etEmail,etPassword;
     String stringEmail,stringPassword;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +23,13 @@ public class LoginScreen extends AppCompatActivity  {
         btnLogin = findViewById(R.id.btnLogin);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+
+        preferences = getSharedPreferences("MYPREFS",MODE_PRIVATE);
+
+        if (preferences.getBoolean("logged",true)){
+            Intent intent = new Intent(this,LoggingIn.class);
+            startActivity(intent);
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

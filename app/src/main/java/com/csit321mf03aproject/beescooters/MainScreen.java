@@ -1,7 +1,11 @@
 package com.csit321mf03aproject.beescooters;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
@@ -16,6 +20,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 import com.android.volley.Request;
@@ -43,6 +50,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -61,6 +69,10 @@ public class MainScreen extends AppCompatActivity
     private static final String TAG = MainScreen.class.getSimpleName();
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
+
+    //NAVIGATION DRAWER
+    private DrawerLayout myDrawer;
+    private ActionBarDrawerToggle myToggle;
 
     // The entry points to the Places API.
     private GeoDataClient mGeoDataClient;
@@ -101,10 +113,10 @@ public class MainScreen extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         requestQueue = Volley.newRequestQueue(this);
-
 
         // Retrieve location and camera position from saved instance state if exists.
         if (savedInstanceState != null) {
@@ -129,7 +141,29 @@ public class MainScreen extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        //!!!!!!!!!!!!!!!!!!THIS NEEDS TO BE FIXED (HAMBURGER MENU)!!!!!!!!!!!!!!!!!!//
+        /*
+        myDrawer = findViewById(R.id.myDrawer);
+        myToggle = new ActionBarDrawerToggle(this,myDrawer,R.string.open,R.string.close);
+
+        myDrawer.addDrawerListener(myToggle);
+        myToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        */
     }
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(myToggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    */
+
+    //!!!!!!!!!!!!!!!!!!THIS NEEDS TO BE FIXED (HAMBURGER MENU)!!!!!!!!!!!!!!!!!!//
 
     public void sendJsonRequest ()
     {
@@ -218,7 +252,22 @@ public class MainScreen extends AppCompatActivity
      */
     @Override
     public void onMapReady(GoogleMap map) {
+
         mMap = map;
+
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = map.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.mapstyle));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
 
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
@@ -500,16 +549,15 @@ public class MainScreen extends AppCompatActivity
         return false;
     }
 
-    private String getDirectionsUrl ()
-    {
-        StringBuilder googleDirectionsUrl = new StringBuilder (googleDirectionsRequestsUrl);
+    private String getDirectionsUrl () {
+        StringBuilder googleDirectionsUrl = new StringBuilder(googleDirectionsRequestsUrl);
 
         //append user current location to origin part of request
         googleDirectionsUrl.append("origin=" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
         //append marker LatLong to destination part of request
         googleDirectionsUrl.append("&destination=" + destinationLatitude + "," + destinationLongitude);
         //append our key to key part of request
-        googleDirectionsUrl.append("&key="+"AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
+        googleDirectionsUrl.append("&key=" + "AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
         return googleDirectionsUrl.toString();
     }
 }

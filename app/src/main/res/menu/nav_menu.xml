@@ -18,4 +18,7 @@
         android:icon="@drawable/safety_icon"/>
     <item android:title="Become a Charger"
           android:icon="@drawable/charger_icon"/>
+    <item android:title="Logout"
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_logout_icon"/>
 </menu>
