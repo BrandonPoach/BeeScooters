@@ -52,6 +52,7 @@
         <activity android:name=".EndingTripScreen" />
         <activity android:name=".Payment_Screen" />
         <activity android:name=".QRCodeScannerScreen">
+
         </activity>
 
 

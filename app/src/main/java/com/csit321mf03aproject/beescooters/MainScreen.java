@@ -1,6 +1,7 @@
 package com.csit321mf03aproject.beescooters;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 
 import com.android.volley.Request;
@@ -511,5 +513,12 @@ public class MainScreen extends AppCompatActivity
         //append our key to key part of request
         googleDirectionsUrl.append("&key="+"AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
         return googleDirectionsUrl.toString();
+    }
+
+    public void startQRCodeScanner (View v)
+    {
+        //User clicked RIDE, jump to QR Code Scanner
+        Intent intent = new Intent(this, QRCodeScannerScreen.class);
+        startActivity(intent);
     }
 }
