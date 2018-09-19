@@ -52,7 +52,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             String regFirstName = params[2];
             String regLastName = params[3];
             String regEmail = params[4];
-            String regPassword = params[5];
+            String regAddress = params[5];
+            String regPassword = params[6];
 
             try {
                 URL url = new URL(urlRegistration);
@@ -67,6 +68,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                         +URLEncoder.encode("identifier_family","UTF-8")+"="+URLEncoder.encode(regLastName,"UTF-8")+"&"
                         +URLEncoder.encode("identifier_type","UTF-8")+"="+URLEncoder.encode("normal","UTF-8")+"&"
                         +URLEncoder.encode("identifier_email","UTF-8")+"="+URLEncoder.encode(regEmail,"UTF-8")+"&"
+                        +URLEncoder.encode("identifier_address","UTF-8")+"="+URLEncoder.encode(regAddress,"UTF-8")+"&"
                         +URLEncoder.encode("identifier_password","UTF-8")+"="+URLEncoder.encode(regPassword,"UTF-8");
                 bufferedWriter.write(myData);
                 bufferedWriter.flush();
@@ -151,7 +153,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
         if(flag.equals("register")) {
             Toast.makeText(context,s,Toast.LENGTH_LONG).show();
         }
-        if(flag.equals("login")){
+        else if(flag.equals("login")){
             String test = "false";
             String name = "";
             String email = "";
@@ -164,6 +166,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 editor.putString("name",name);
                 editor.commit();
                 editor.putString("email",email);
+                editor.commit();
+                editor.putBoolean("logged",true);
                 editor.commit();
                 Intent intent = new Intent(context,LoggingIn.class);
                 context.startActivity(intent);

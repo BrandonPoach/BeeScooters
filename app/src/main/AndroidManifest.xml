@@ -36,13 +36,12 @@
 
         <activity android:name=".SplashScreen"
             android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".MainScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainScreen">
         </activity>
         <activity android:name=".ParkingScreen" />
         <activity android:name=".SafetyScreen" />
