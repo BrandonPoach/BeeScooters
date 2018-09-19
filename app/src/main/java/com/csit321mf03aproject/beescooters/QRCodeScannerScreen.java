@@ -152,7 +152,7 @@ public class QRCodeScannerScreen extends AppCompatActivity {
                     txtResult.post(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d("SERENA", "Im here");
+
                             cameraSource.stop();
                             //Vibrate Phone when QR detected
                             Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -195,7 +195,6 @@ public class QRCodeScannerScreen extends AppCompatActivity {
     private void  checkQRCode ()
     {
         requestQueue = Volley.newRequestQueue(this);
-        final String scooterID;
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.POST, URL, null, new Response.Listener<JSONArray>() {
             @Override
@@ -207,7 +206,6 @@ public class QRCodeScannerScreen extends AppCompatActivity {
                     for (int i = 0; i<response.length(); i++)
                     {
                         JSONObject scooterObject = response.getJSONObject(i);
-                        //Log.d("BEE ERROR1", String.valueOf(scooterObject.toString()));
 
                         qrCode = scooterObject.getString("qrCode");
                         scooterID = scooterObject.getString("scooterID");

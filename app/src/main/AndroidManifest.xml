@@ -36,10 +36,7 @@
 
         <activity android:name=".SplashScreen"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".MainScreen">
         </activity>
@@ -54,10 +51,17 @@
 
         </activity>
 
+        <activity android:name=".RideHistoryScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".RidingScreen">
 
         </activity>
+
         <service
             android:name=".ChronometerJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />

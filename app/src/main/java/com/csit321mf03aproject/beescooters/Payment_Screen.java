@@ -39,7 +39,7 @@ public class Payment_Screen extends AppCompatActivity {
     String token, amount;
     String userID = "5"; //just for testing purposes
     String scooterID = "scooter003";    //testing
-    String tripTime = "444";    //testing
+    String tripTime; //testing
     HashMap<String, String> paramHash;
     int payment_amount;
     Button btn_pay;
@@ -58,6 +58,7 @@ public class Payment_Screen extends AppCompatActivity {
         if(trip_time == null) {
             payment_amount = 0;
         } else {
+            tripTime = trip_time.getString("TRIP_TIME") ;
             payment_amount = trip_time.getInt("TRIP_TIME") ;
             //set payment cost plan here later
         }
@@ -150,6 +151,11 @@ public class Payment_Screen extends AppCompatActivity {
                         //received approval
                         if (response.toString().contains("Successful")) {
                             Toast.makeText(Payment_Screen.this, "Transaction Successful!", Toast.LENGTH_SHORT).show();
+
+                            //return back to main screen
+                            Intent intent = new Intent(Payment_Screen.this, MainScreen.class);
+                            startActivity(intent);
+
                         } else {
                             Toast.makeText(Payment_Screen.this, "Transaction Failed!", Toast.LENGTH_SHORT).show();
                         }
