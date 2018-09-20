@@ -1,24 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/acc_icon"
+            android:title="Account" />
 
-    <item
-        android:icon="@drawable/acc_icon"
-        android:title="Account" />
-    <item
-        android:icon="@drawable/payment_icon"
-        android:title="Payment" />
-    <item android:title="Ride History"
+        <item
+            android:id="@+id/nav_payment"
+            android:icon="@drawable/payment_icon"
+            android:title="Payment" />
+
+        <item
+            android:id="@+id/nav_history"
+            android:title="Ride History"
             android:icon="@drawable/ride_history" />
 
-    <item android:title="How To Ride"
+        <item
+            android:id="@+id/nav_howtoride"
+            android:title="How To Ride"
             android:icon="@drawable/howtoride_icon"/>
 
-    <item android:title="Safety"
-        android:icon="@drawable/safety_icon"/>
-    <item android:title="Become a Charger"
-          android:icon="@drawable/charger_icon"/>
-    <item android:title="Logout"
-        android:id="@+id/logout"
-        android:icon="@drawable/ic_logout_icon"/>
+        <item
+            android:id="@+id/nav_safety"
+            android:title="Safety"
+            android:icon="@drawable/safety_icon"/>
+
+        <item
+            android:id="@+id/nav_charger"
+            android:title="Become a Charger"
+            android:icon="@drawable/charger_icon"/>
+
+        <item
+            android:id="@+id/nav_logout"
+            android:title="Logout"
+            android:icon="@drawable/ic_logout_icon"/>
+    </group>
 </menu>

@@ -1,7 +1,6 @@
 package com.csit321mf03aproject.beescooters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -9,39 +8,30 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
-import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
-
-import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.braintreepayments.api.Json;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,10 +43,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import com.google.android.gms.maps.model.Polyline;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,11 +57,10 @@ public class MainScreen extends AppCompatActivity
 
     private static final String TAG = MainScreen.class.getSimpleName();
     private GoogleMap mMap;
-    private CameraPosition mCameraPosition;
 
-    //NAVIGATION DRAWER
-    private DrawerLayout myDrawer;
-    private ActionBarDrawerToggle myToggle;
+    //Navigation Drawer
+    private DrawerLayout mDrawerLayout;
+    Context context;
 
     // The entry points to the Places API.
     private GeoDataClient mGeoDataClient;
@@ -116,16 +104,74 @@ public class MainScreen extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
 
+        // Retrieve the content view that renders the map.
+        setContentView(R.layout.activity_main_screen);
+
+        //Navigation Drawer
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                        switch(menuItem.getItemId()){
+                            //Account
+
+                            //Payment
+                            case R.id.nav_payment:
+                                startActivity(new Intent(MainScreen.this, Payment_Screen.class));
+                                break;
+
+                            //Ride History
+                            case R.id.nav_history:
+                                startActivity(new Intent(MainScreen.this, RideHistoryScreen.class));
+                                break;
+
+                            //How to Ride
+                            case R.id.nav_howtoride:
+                                startActivity(new Intent(MainScreen.this, HowToRide2Screen.class));
+                                break;
+
+                            //Safety
+                            case R.id.nav_safety:
+                                startActivity(new Intent(MainScreen.this, Safety2Screen.class));
+                                break;
+
+                            //Become a Charger
+
+                            //Logout
+                            case R.id.nav_logout:
+                                SharedPreferences preferences =getSharedPreferences("MYPREFS",Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.clear();
+                                editor.commit();
+                                startActivity(new Intent(MainScreen.this, LoginScreen.class));
+                                finish();
+                                break;
+                        }
+
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+
+                        return true;
+                    }
+                });
+
         requestQueue = Volley.newRequestQueue(this);
 
         // Retrieve location and camera position from saved instance state if exists.
         if (savedInstanceState != null) {
             mLastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
-            mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+            CameraPosition mCameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
-
-        // Retrieve the content view that renders the map.
-        setContentView(R.layout.activity_main_screen);
 
         // Construct a GeoDataClient.
        mGeoDataClient = Places.getGeoDataClient(this);
@@ -141,29 +187,17 @@ public class MainScreen extends AppCompatActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //!!!!!!!!!!!!!!!!!!THIS NEEDS TO BE FIXED (HAMBURGER MENU)!!!!!!!!!!!!!!!!!!//
-        /*
-        myDrawer = findViewById(R.id.myDrawer);
-        myToggle = new ActionBarDrawerToggle(this,myDrawer,R.string.open,R.string.close);
-
-        myDrawer.addDrawerListener(myToggle);
-        myToggle.syncState();
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        */
     }
 
-    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(myToggle.onOptionsItemSelected(item)){
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    */
-
-    //!!!!!!!!!!!!!!!!!!THIS NEEDS TO BE FIXED (HAMBURGER MENU)!!!!!!!!!!!!!!!!!!//
 
     public void sendJsonRequest ()
     {
