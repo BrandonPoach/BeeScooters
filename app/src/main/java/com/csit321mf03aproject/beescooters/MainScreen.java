@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -145,7 +146,9 @@ public class MainScreen extends AppCompatActivity
                                 break;
 
                             //Become a Charger
-
+                            case R.id.nav_charger:
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://beescooters.net")));
+                                break;
                             //Logout
                             case R.id.nav_logout:
                                 SharedPreferences preferences =getSharedPreferences("MYPREFS",Context.MODE_PRIVATE);
