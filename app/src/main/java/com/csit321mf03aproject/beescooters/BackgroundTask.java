@@ -157,15 +157,19 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             String test = "false";
             String name = "";
             String email = "";
+            String userID = "";
             String[] serverResponse = s.split("[,]");
             test = serverResponse[0];
             name = serverResponse[1];
             email = serverResponse[2];
+            userID = serverResponse[3];
 
             if(test.equals("true")){
                 editor.putString("name",name);
                 editor.commit();
                 editor.putString("email",email);
+                editor.commit();
+                editor.putString("userID",userID);
                 editor.commit();
                 editor.putBoolean("logged",true);
                 editor.commit();

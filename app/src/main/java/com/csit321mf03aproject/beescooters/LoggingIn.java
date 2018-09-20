@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 public class LoggingIn extends AppCompatActivity {
-    TextView name,email;
+    TextView name,email, userid;
     SharedPreferences preferences;
 
     @Override
@@ -19,12 +19,15 @@ public class LoggingIn extends AppCompatActivity {
 
         email = (TextView) findViewById(R.id.textEmail);
         name = (TextView) findViewById(R.id.textName);
+        userid = findViewById(R.id.textUserID);
         preferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
 
         String mName = preferences.getString("name","ERROR getting name");
         String mEmail = preferences.getString("email","ERROR getting email");
+        String mUserID = preferences.getString("userID","ERROR getting User ID");
         name.setText(mName);
         email.setText(mEmail);
+        userid.setText(mUserID);
         Thread myThread = new Thread(){
             @Override
             public void run() {
