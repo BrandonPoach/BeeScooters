@@ -42,6 +42,8 @@ public class RidingScreen extends AppCompatActivity {
     // Message type for the handler
     private final static int MSG_UPDATE_TIME = 0;
 
+    private static String scooterID;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.riding_screen);
@@ -49,6 +51,14 @@ public class RidingScreen extends AppCompatActivity {
         timerButton = (Button)findViewById(R.id.timer_button);
         timerTextView = findViewById(R.id.timer_text_view);
         infoText = (TextView)findViewById(R.id.info_text);
+
+        Bundle scooter_id = getIntent().getExtras();
+        if(scooter_id == null) {
+            scooterID = "scooter001";
+        } else {
+            scooterID = scooter_id.getString("SCOOTER_ID");
+            Log.d("scooterID", ""+scooterID);
+        }
     }
 
     @Override
@@ -268,6 +278,7 @@ public class RidingScreen extends AppCompatActivity {
                 //goto payment screen and pass the time elapsed
                 Intent intent  = new Intent (this, Payment_Screen.class);
                 intent.putExtra("TRIP_TIME", elapsedSeconds);
+                intent.putExtra("SCOOTER_ID", scooterID);
                 startActivity(intent);
             }
             else {

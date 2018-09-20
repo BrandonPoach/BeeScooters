@@ -1,7 +1,9 @@
 package com.csit321mf03aproject.beescooters;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -37,8 +39,8 @@ public class Payment_Screen extends AppCompatActivity {
     final String API_CHECK_OUT = "http://beescooters.net/admin/checkout.php";
 
     String token, amount;
-    String userID = "5"; //just for testing purposes
-    String scooterID = "scooter003";    //testing
+    //String userID = "5"; //just for testing purposes
+    //String scooterID = "scooter003";    //testing
     String tripTime; //testing
     HashMap<String, String> paramHash;
     float payment_amount;
@@ -46,11 +48,18 @@ public class Payment_Screen extends AppCompatActivity {
     TextView payment_text;
     LinearLayout group_waiting;
     ConstraintLayout group_payment;
+    SharedPreferences preferences;
+    private String userID;
+    private String scooterID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.payment_screen);
+
+        preferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        userID = preferences.getString("userID","ERROR getting User ID");
+        Log.d("USER_ID", ""+userID);
 
         //retrieving trip time from Riding screen
         Bundle trip_time = getIntent().getExtras();
@@ -60,6 +69,8 @@ public class Payment_Screen extends AppCompatActivity {
             tripTime = String.valueOf(trip_time.getInt("TRIP_TIME"));
             Log.d("TRIP", ""+tripTime);
 
+            scooterID = trip_time.getString("SCOOTER_ID");
+            Log.d("SCOOTER_IDs", ""+scooterID);
             //payment_amount = Integer.valueOf(tripTime) / 100;
             payment_amount = (Float.valueOf(tripTime) / 100f);
             //set payment cost plan here later
