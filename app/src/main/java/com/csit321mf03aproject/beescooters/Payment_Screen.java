@@ -41,9 +41,8 @@ public class Payment_Screen extends AppCompatActivity {
     String scooterID = "scooter003";    //testing
     String tripTime; //testing
     HashMap<String, String> paramHash;
-    int payment_amount;
+    float payment_amount;
     Button btn_pay;
-    //EditText edt_amount;
     TextView payment_text;
     LinearLayout group_waiting;
     ConstraintLayout group_payment;
@@ -58,8 +57,11 @@ public class Payment_Screen extends AppCompatActivity {
         if(trip_time == null) {
             payment_amount = 0;
         } else {
-            tripTime = trip_time.getString("TRIP_TIME") ;
-            payment_amount = trip_time.getInt("TRIP_TIME") ;
+            tripTime = String.valueOf(trip_time.getInt("TRIP_TIME"));
+            Log.d("TRIP", ""+tripTime);
+
+            //payment_amount = Integer.valueOf(tripTime) / 100;
+            payment_amount = (Float.valueOf(tripTime) / 100f);
             //set payment cost plan here later
         }
 
@@ -106,7 +108,7 @@ public class Payment_Screen extends AppCompatActivity {
                //if (!edt_amount.getText().toString().isEmpty())
                //{
                    //assigned user entered values to variables
-                   amount = Integer.toString(payment_amount);   //edt_amount.getText().toString();
+                   amount = Float.toString(payment_amount);
                    paramHash = new HashMap<>();
                    paramHash.put("amount", amount);
                    paramHash.put("nonce", strNonce);
@@ -164,7 +166,7 @@ public class Payment_Screen extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("BEE_LOG", error.toString());
+                Log.d("BEE_LOGS4", error.toString());
             }
         })
         {

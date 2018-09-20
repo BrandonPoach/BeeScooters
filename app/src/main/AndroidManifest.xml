@@ -39,6 +39,10 @@
 
         </activity>
         <activity android:name=".MainScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".ParkingScreen" />
         <activity android:name=".SafetyScreen" />
@@ -52,10 +56,7 @@
         </activity>
 
         <activity android:name=".RideHistoryScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".RidingScreen">

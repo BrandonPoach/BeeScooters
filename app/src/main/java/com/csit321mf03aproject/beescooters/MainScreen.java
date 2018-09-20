@@ -62,7 +62,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class MainScreen extends AppCompatActivity
         implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -539,12 +538,19 @@ public class MainScreen extends AppCompatActivity
         Object dataTransfer[] = new Object[2];
         dataTransfer = new Object[3];
         url = getDirectionsUrl();
-        GetDirectionsData getDirectionsData = new GetDirectionsData();
-        dataTransfer[0] = mMap;
-        dataTransfer[1] = url;
-        dataTransfer[2] = new LatLng(destinationLatitude, destinationLongitude);
-        getDirectionsData.execute(dataTransfer);
 
+        if (url != " "){
+
+            GetDirectionsData getDirectionsData = new GetDirectionsData();
+            dataTransfer[0] = mMap;
+            dataTransfer[1] = url;
+            dataTransfer[2] = new LatLng(destinationLatitude, destinationLongitude);
+            getDirectionsData.execute(dataTransfer);
+            ScooterInfoSheet scooterInfoSheet = new ScooterInfoSheet();
+            scooterInfoSheet.show(getSupportFragmentManager(), "scooterBottomSheet");
+        }
+        else
+            Log.d("NULL_EXCEPTION", "I am here");
 
         return false;
     }
@@ -552,13 +558,22 @@ public class MainScreen extends AppCompatActivity
     private String getDirectionsUrl () {
         StringBuilder googleDirectionsUrl = new StringBuilder(googleDirectionsRequestsUrl);
 
-        //append user current location to origin part of request
-        googleDirectionsUrl.append("origin=" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
-        //append marker LatLong to destination part of request
-        googleDirectionsUrl.append("&destination=" + destinationLatitude + "," + destinationLongitude);
-        //append our key to key part of request
-        googleDirectionsUrl.append("&key=" + "AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
-        return googleDirectionsUrl.toString();
+        //sometimes it loads slow so it might be null object
+        if (mLastKnownLocation ==  null)
+        {
+            return " ";
+        }
+
+        else
+        {
+            //append user current location to origin part of request
+            googleDirectionsUrl.append("origin=" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
+            //append marker LatLong to destination part of request
+            googleDirectionsUrl.append("&destination=" + destinationLatitude + "," + destinationLongitude);
+            //append our key to key part of request
+            googleDirectionsUrl.append("&key=" + "AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
+            return googleDirectionsUrl.toString();
+        }
     }
 
     public void startQRCodeScanner (View v)
