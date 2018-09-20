@@ -36,42 +36,28 @@
 
         <activity android:name=".SplashScreen"
             android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".MainScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainScreen" />
         <activity android:name=".ParkingScreen" />
+        <activity android:name=".ParkingScreen2" />
         <activity android:name=".SafetyScreen" />
         <activity android:name=".Safety2Screen" />
         <activity android:name=".HowToRideScreen" />
         <activity android:name=".HowToRide2Screen" />
         <activity android:name=".EndingTripScreen" />
         <activity android:name=".Payment_Screen" />
-        <activity android:name=".QRCodeScannerScreen">
-
-        </activity>
-
-        <activity android:name=".RideHistoryScreen">
-
-        </activity>
-
-        <activity android:name=".RidingScreen">
-
-        </activity>
-
-        <service
-            android:name=".ChronometerJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
+        <activity android:name=".QRCodeScannerScreen" />
+        <activity android:name=".RidingScreen" />
+        <activity android:name=".ScanCode" />
+        <activity android:name=".RideHistoryScreen" />
         <activity android:name=".LoginScreen"
             android:label="@string/title_activity_login_screen"/>
         <activity android:name=".LoggingIn" />
         <activity android:name=".Register" />
-
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
             <intent-filter>
@@ -81,6 +67,10 @@
                 <data android:scheme="${applicationId}.braintree" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".ChronometerJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <meta-data
             android:name="preloaded_fonts"

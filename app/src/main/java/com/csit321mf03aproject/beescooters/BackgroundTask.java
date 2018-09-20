@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.renderscript.ScriptGroup;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -20,16 +18,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import java.nio.Buffer;
-
-import javax.net.ssl.HttpsURLConnection;
+//Background Task Description: Function used to register or login a user
 
 public class BackgroundTask extends AsyncTask<String,Void,String> {
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+    String password;
 
-    Context context;
+    public Context context;
 
     BackgroundTask(Context ctx){
         this.context = ctx;
@@ -127,6 +124,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
 
                 editor.putString("flag","login");
                 editor.commit();
+                password = loginPassword;
                 return  dataResponse;
 
             } catch (MalformedURLException e) {
@@ -152,6 +150,8 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
 
         if(flag.equals("register")) {
             Toast.makeText(context,s,Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context,HowToRide2Screen.class);
+                context.startActivity(intent);
         }
         else if(flag.equals("login")){
             String test = "false";

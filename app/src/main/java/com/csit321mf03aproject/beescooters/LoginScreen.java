@@ -26,7 +26,7 @@ public class LoginScreen extends AppCompatActivity  {
 
         preferences = getSharedPreferences("MYPREFS",MODE_PRIVATE);
 
-        if (preferences.getBoolean("logged",true)){
+        if (preferences.getString("email", "") != ""){
             Intent intent = new Intent(this,LoggingIn.class);
             startActivity(intent);
         }
