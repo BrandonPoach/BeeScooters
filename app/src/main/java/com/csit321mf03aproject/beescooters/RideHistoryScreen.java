@@ -1,6 +1,8 @@
 package com.csit321mf03aproject.beescooters;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +33,8 @@ public class RideHistoryScreen extends AppCompatActivity {
 
     private List <TransactionItem> transactionItem;
     RequestQueue requestQueue;
+    SharedPreferences sharedPreferences;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,8 @@ public class RideHistoryScreen extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         transactionItem = new ArrayList<>();
+        sharedPreferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        userID = sharedPreferences.getString("userID", "Error Getting User ID!");
 
         getRecyclerViewData();
 
@@ -65,12 +71,18 @@ public class RideHistoryScreen extends AppCompatActivity {
                     for (int i = 0; i<response.length(); i++)
                     {
                         JSONObject transactionObject = response.getJSONObject(i);
-                        TransactionItem item = new TransactionItem(
-                                transactionObject.getString("transDate"),
-                                transactionObject.getString("tripTime"),
-                                transactionObject.getString("amount")
-                        );
-                        transactionItem.add(item);
+                        Log.d("TEMP", ""+userID);
+                        //only get ID of current user
+                        if (transactionObject.getString("userID").equals(userID))
+                        {
+                            Log.d("TEMP2", ""+transactionObject.getString("userID"));
+                            TransactionItem item = new TransactionItem(
+                                    transactionObject.getString("transDate"),
+                                    transactionObject.getString("tripTime"),
+                                    transactionObject.getString("amount")
+                            );
+                            transactionItem.add(item);
+                        }
                     }
 
                     mAdapter = new MyAdapter (transactionItem, getApplicationContext());
