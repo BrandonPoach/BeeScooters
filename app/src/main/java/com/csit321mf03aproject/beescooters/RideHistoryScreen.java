@@ -4,9 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -31,15 +33,23 @@ public class RideHistoryScreen extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    private List <TransactionItem> transactionItem;
+    //private List <TransactionItem> transactionItem;
+    private List <ListItems> lItems;
     RequestQueue requestQueue;
     SharedPreferences sharedPreferences;
     private String userID;
+    String tempDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_history_screen);
+
+        Toolbar toolbar = findViewById(R.id.ride_history_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setTitle("Ride History");
 
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -48,7 +58,8 @@ public class RideHistoryScreen extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        transactionItem = new ArrayList<>();
+        //transactionItem = new ArrayList<>();
+        lItems = new ArrayList<>();
         sharedPreferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         userID = sharedPreferences.getString("userID", "Error Getting User ID!");
 
@@ -75,17 +86,42 @@ public class RideHistoryScreen extends AppCompatActivity {
                         //only get ID of current user
                         if (transactionObject.getString("userID").equals(userID))
                         {
-                            Log.d("TEMP2", ""+transactionObject.getString("userID"));
                             TransactionItem item = new TransactionItem(
                                     transactionObject.getString("transDate"),
                                     transactionObject.getString("tripTime"),
-                                    transactionObject.getString("amount")
-                            );
-                            transactionItem.add(item);
+                                    transactionObject.getString("amount"));
+                            Log.d("TEMP2", ""+transactionObject.getString("userID"));
+                            if (!tempDate.equals(transactionObject.getString("transDate")))
+                            {
+                                tempDate = item.getDate();
+                                ListItems listItem = new ListItems();
+                                listItem.setTAG((tempDate));
+                                listItem.setObject(null);
+                                lItems.add(listItem);
+
+                                ListItems listItem2 = new ListItems();
+                                listItem2.setObject(item);
+                                listItem2.setTAG(null);
+                                lItems.add(listItem2);
+
+                                Log.d("RH1", ""+tempDate);
+                                Log.d("RH3", ""+transactionObject.getString("transDate"));
+                            }
+
+                            else
+                            {
+                                tempDate = item.getDate();
+                                ListItems listItems = new ListItems();
+                                listItems.setObject(item);
+                                listItems.setTAG(null);
+                                lItems.add(listItems);
+                                Log.d("RH2", "RH2");
+                            }
+
                         }
                     }
 
-                    mAdapter = new MyAdapter (transactionItem, getApplicationContext());
+                    mAdapter = new MyAdapter (lItems, getApplicationContext());
                     mRecyclerView.setAdapter(mAdapter);
 
                 } catch (JSONException e) {

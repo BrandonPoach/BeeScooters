@@ -124,6 +124,9 @@ public class MainScreen extends AppCompatActivity
 
                         switch(menuItem.getItemId()){
                             //Account
+                            case R.id.nav_account:
+                                startActivity(new Intent(MainScreen.this, AccountScreen.class));
+                                break;
 
                             //Payment
                             case R.id.nav_payment:

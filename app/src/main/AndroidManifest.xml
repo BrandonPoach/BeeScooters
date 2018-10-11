@@ -44,6 +44,7 @@
 
         </activity>
         <activity android:name=".ParkingScreen" />
+        <activity android:name=".AccountScreen" />
         <activity android:name=".ParkingScreen2" />
         <activity android:name=".SafetyScreen" />
         <activity android:name=".Safety2Screen" />

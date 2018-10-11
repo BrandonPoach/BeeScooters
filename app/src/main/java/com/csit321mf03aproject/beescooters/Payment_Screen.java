@@ -22,9 +22,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.braintreepayments.api.PaymentMethod;
 import com.braintreepayments.api.dropin.DropInActivity;
 import com.braintreepayments.api.dropin.DropInRequest;
 import com.braintreepayments.api.dropin.DropInResult;
+import com.braintreepayments.api.dropin.adapters.VaultedPaymentMethodsAdapter;
+import com.braintreepayments.api.dropin.utils.PaymentMethodType;
 import com.braintreepayments.api.interfaces.HttpResponseCallback;
 import com.braintreepayments.api.internal.HttpClient;
 import com.braintreepayments.api.models.PaymentMethodNonce;
@@ -39,8 +42,6 @@ public class Payment_Screen extends AppCompatActivity {
     final String API_CHECK_OUT = "http://beescooters.net/admin/checkout.php";
 
     String token, amount;
-    //String userID = "5"; //just for testing purposes
-    //String scooterID = "scooter003";    //testing
     String tripTime; //testing
     HashMap<String, String> paramHash;
     float payment_amount;
@@ -59,7 +60,6 @@ public class Payment_Screen extends AppCompatActivity {
 
         preferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         userID = preferences.getString("userID","ERROR getting User ID");
-        Log.d("USER_ID", ""+userID);
 
         //retrieving trip time from Riding screen
         Bundle trip_time = getIntent().getExtras();
@@ -98,10 +98,47 @@ public class Payment_Screen extends AppCompatActivity {
     private void submitPayment() {
         //this codes displays the diff payment methods that the user can use to pay
         //https://github.com/braintree/braintree-android-drop-in
-        DropInRequest dropInRequest = new DropInRequest().clientToken(token);
-        startActivityForResult(dropInRequest.getIntent(this), REQUEST_CODE);
+        DropInRequest dropInRequest = new DropInRequest().clientToken(token).vaultManager(true);
+        startActivityForResult(dropInRequest.getIntent(Payment_Screen.this), REQUEST_CODE);
+
+
+       /* DropInResult.fetchDropInResult(this, token, new DropInResult.DropInResultListener() {
+            @Override
+            public void onError(Exception exception) {
+                // an error occurred
+            }
+
+            @Override
+            public void onResult(DropInResult result) {
+                if (result.getPaymentMethodType() != null) {
+                    // use the icon and name to show in your UI
+                    int icon = result.getPaymentMethodType().getDrawable();
+                    int name = result.getPaymentMethodType().getLocalizedName();
+
+                    PaymentMethodType paymentMethodType = result.getPaymentMethodType();
+                    if (paymentMethodType == PaymentMethodType.ANDROID_PAY || paymentMethodType == PaymentMethodType.GOOGLE_PAYMENT) {
+                        // The last payment method the user used was Android Pay or Google Pay.
+                        // The Android/Google Pay flow will need to be performed by the
+                        // user again at the time of checkout.
+                    } else {
+                        // Use the payment method show in your UI and charge the user
+                        // at the time of checkout.
+                        PaymentMethodNonce paymentMethod = result.getPaymentMethodNonce();
+                    }
+                } else {
+                    Log.d("BEE_ERROR", "I'm inside here");
+
+                    // there was no existing payment method
+                }
+            }
+        });*/
+
     }
+
+
+
     //Ctrl + O
+
 
     //https://github.com/braintree/braintree-android-drop-in
     //handle the response from DopInRequest
@@ -112,7 +149,7 @@ public class Payment_Screen extends AppCompatActivity {
            if (resultCode == RESULT_OK)
            {
                DropInResult result = data.getParcelableExtra(DropInResult.EXTRA_DROP_IN_RESULT);
-               PaymentMethodNonce nonce = result.getPaymentMethodNonce();
+               PaymentMethodNonce nonce = result.getPaymentMethodNonce();   //receive nonce from Braintree server
                String strNonce = nonce.getNonce();  //nonce from Braintree server
                 //user entered value
 

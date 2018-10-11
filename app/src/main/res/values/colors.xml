@@ -9,4 +9,15 @@
     <color name="list_item_title">#AAAAAA</color>
     <color name="list_group_title">#808080</color>
 
+    <color name="address">#2F7092</color>
+    <color name="headings">	#DAA520</color>
+    <color name="solidCircle">#80FFFFFF</color>
+    <color name="circleBorder">#30FFFFFF</color>
+    <color name="gradientEnd">#edde5d</color>
+    <color name="gradientStart">#fffc00</color>
+    <color name="grey">#E5E5E5</color>
+    <color name="chargeBg">#E8AC41</color>
+    <color name="rideBg">#FFD700</color>
+    <color name="textColor">#505050</color>
+
 </resources>
