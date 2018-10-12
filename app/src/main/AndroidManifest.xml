@@ -40,7 +40,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainScreen">
+        <activity android:name=".MainScreen" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         </activity>
         <activity android:name=".ParkingScreen" />
@@ -55,11 +55,12 @@
         <activity android:name=".QRCodeScannerScreen" />
         <activity android:name=".RidingScreen" />
         <activity android:name=".ScanCode" />
-        <activity android:name=".RideHistoryScreen" />
+        <activity android:name=".RideHistoryScreen" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".LoginScreen"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/title_activity_login_screen"/>
-        <activity android:name=".LoggingIn" />
-        <activity android:name=".Register" />
+        <activity android:name=".LoggingIn" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".Register" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
             <intent-filter>

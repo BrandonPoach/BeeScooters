@@ -19,7 +19,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Context context;
     private int itemType;
 
-
     public MyAdapter(List<ListItems> transactionItemList, Context context) {
         //get the list from RideHistoryScreen
         this.lItems = transactionItemList;

@@ -6,8 +6,9 @@
     <TextView
     android:id="@+id/dateHeader"
     android:gravity="center"
+    android:fontFamily="@font/montserrat"
     android:textColor="#000000"
-    android:textSize="@dimen/abc_text_size_large_material"
+    android:textSize="16sp"
     android:background="#DCDCDC"
     android:layout_width="match_parent"
     android:layout_height="50dp" />

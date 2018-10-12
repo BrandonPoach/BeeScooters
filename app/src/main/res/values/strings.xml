@@ -34,4 +34,15 @@
         completions."</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+
+    <!-- Strings related to add credit -->
+    <string-array name="credit_amounts">
+        <item>$5</item>
+        <item>$10</item>
+        <item>$15</item>
+        <item>$20</item>
+        <item>$50</item>
+    </string-array>
+
+
 </resources>
