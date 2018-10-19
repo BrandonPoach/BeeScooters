@@ -2,7 +2,7 @@
     <string name="app_name">Bee Scooters</string>
     <string name="safety_message">It is crucial to Bee that all our users follow local road rules. Users must at all
     times ride in bike lanes and always wear a helmet. Each scooter should have a helmet with it before you start your ride.
-        If a scooter doesn'thave a helmet or the helmet is damaged, please report to us so we can replace it. Also, report any
+        If a scooter doesn\'thave a helmet or the helmet is damaged, please report to us so we can replace it. Also, report any
         scooters that appear damaged so we can fix them immediately.</string>
     <string name="safety_message2">Want your own free personal Bee helmet? Contact us so we can send one to your address free of charge.</string>
     <string name="steps_message">Step 1: Kick start three times to start moving\n\nStep 2: Then push the throttle button on the right handle with your thumb</string>
@@ -36,6 +36,8 @@
     <string name="close">Close</string>
 
     <!-- Strings related to add credit -->
+    <string name="amountInfo">Select amount you want to top up from the selections below</string>
+    <string name="button_add_credits">ADD CREDITS</string>
     <string-array name="credit_amounts">
         <item>$5</item>
         <item>$10</item>
@@ -44,5 +46,8 @@
         <item>$50</item>
     </string-array>
 
+    <!-- Strings related to add credit -->
+    <string name="txtRideSummary">Ride Summary</string>
+    <string name="buttonMainMenu">MAIN MENU</string>
 
 </resources>

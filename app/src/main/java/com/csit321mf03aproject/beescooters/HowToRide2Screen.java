@@ -15,6 +15,7 @@ public class HowToRide2Screen extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.howtoride2_screen);
 
+        getSupportActionBar().setTitle("How To Ride");
         button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

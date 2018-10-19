@@ -138,6 +138,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
     }
 
     @Override
+
     protected void onPreExecute() {
         super.onPreExecute();
     }
@@ -158,11 +159,28 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
             String name = "";
             String email = "";
             String userID = "";
+            String userType = "";
+            String userGivenName = "";
+            String userFamilyName = "";
+            String registerDate = "";
+            String address = "";
+            String creditBalance = "";
+            String customerID = "";
             String[] serverResponse = s.split("[,]");
             test = serverResponse[0];
-            name = serverResponse[1];
-            email = serverResponse[2];
+            email = serverResponse[1];
+            name = serverResponse[2];
             userID = serverResponse[3];
+
+            userType = serverResponse[4];
+            userGivenName = serverResponse[5];
+            userFamilyName = serverResponse[6];
+            registerDate = serverResponse[7];
+            address = serverResponse[8];
+            creditBalance = serverResponse[9];
+            customerID = serverResponse[10];
+
+            String fullName = userGivenName + " " + userFamilyName;
 
             if(test.equals("true")){
                 editor.putString("name",name);
@@ -172,7 +190,24 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 editor.putString("userID",userID);
                 editor.commit();
                 editor.putBoolean("logged",true);
+
+                editor.putString("userType",userType);
                 editor.commit();
+                editor.putString("fullName",fullName);
+                editor.commit();
+                editor.putString("registerDate", registerDate);
+                editor.commit();
+                editor.putString("address", address);
+                editor.commit();
+                editor.putString("creditBalance", creditBalance);
+                editor.commit();
+                editor.putString("userGivenName",userGivenName);
+                editor.commit();
+                editor.putString("userFamilyName",userFamilyName);
+                editor.commit();
+                editor.putString("customerID", customerID);
+                editor.commit();
+
                 Intent intent = new Intent(context,LoggingIn.class);
                 context.startActivity(intent);
             }else{

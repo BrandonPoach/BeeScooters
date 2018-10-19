@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+//Adapter class that creates new views for the recycler list in Ride History
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private List<ListItems> lItems;
@@ -50,6 +51,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         ListItems tempLItems = lItems.get(position);
 
+        //for date header
         if (itemType == 0)
         {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -60,19 +62,24 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
-            //String formattedDate = simpleDateFormat.format(date);
-            //holder.textDateHeader.setText(date.toString());
-
         }
 
+        //for normal records card view
         else if (itemType == 1)
         {
-            holder.textViewDate.setText(tempLItems.getObject().getDate());
-            holder.textViewTripTime.setText("Trip Duration: " + tempLItems.getObject().getTripTime() + " seconds");
-            holder.textViewAmount.setText("Amount: " + tempLItems.getObject().getAmount() + " AUD");
-        }
+            int seconds = Integer.parseInt(tempLItems.getObject().getTripTime());
 
+            int minutes = seconds / 60;
+            seconds = seconds - (minutes*60);
+
+            if (minutes > 0)
+                holder.textViewTripTime.setText(minutes + " minutes " + seconds + " seconds");
+
+            else
+                holder.textViewTripTime.setText(seconds + " seconds");
+
+            holder.textViewAmount.setText(tempLItems.getObject().getAmount() + " AUD");
+        }
     }
 
     @Override
@@ -83,7 +90,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
-        public TextView textViewDate, textViewTripTime, textViewAmount, textDateHeader;
+        public TextView textViewTripTime, textViewAmount, textDateHeader;
 
         public ViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -96,7 +103,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             }
 
             else if (viewType == 1) {
-                textViewDate = itemView.findViewById(R.id.textViewDate);
+
                 textViewTripTime = itemView.findViewById(R.id.textViewTripTime);
                 textViewAmount = itemView.findViewById(R.id.textViewAmount);
 
@@ -110,12 +117,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         if(tListItems.getObject() == null)
         {
+            //if object is null means create date header layout
             itemType = 0;
             return 0;
         }
 
         else
         {
+            //itemType = 1 means create cardview record
             itemType = 1;
             return 1;
         }

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+//just a static info screen
 public class ScanCode extends AppCompatActivity{
 
     private Button button;
@@ -16,7 +17,8 @@ public class ScanCode extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scanqrcode);
 
-        button = (Button) findViewById(R.id.button);
+        getSupportActionBar().setTitle("How To Ride");
+        button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

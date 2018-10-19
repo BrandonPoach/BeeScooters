@@ -27,10 +27,6 @@
         android:background="#fef232"
         android:fadingEdge="none"
         android:fontFamily="@font/montserrat"
-        android:shadowColor="#808080"
-        android:shadowDx="1"
-        android:shadowDy="5"
-        android:shadowRadius="5"
         android:text="NEXT"
         android:textColor="#505050"
         android:textSize="18sp"
@@ -45,9 +41,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="178dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="140dp"
         android:fontFamily="@font/montserrat"
-        android:text="Scan QR code located on the scooter"
+        android:text="Scan QR code located on the scooter. \nIt cost $1 to unlock a scooter and 10 cents for every minute of riding."
         android:textAlignment="center" />
 
     <ImageView

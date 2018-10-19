@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FFEB3B</color>
-    <color name="colorPrimaryDark">#F9A825</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#F57F17</color>
     <color name="colorAccent">#FF4081</color>
     <color name="backgroundColor">#f5f5f5</color>
 
@@ -19,5 +19,7 @@
     <color name="chargeBg">#E8AC41</color>
     <color name="rideBg">#FFD700</color>
     <color name="textColor">#505050</color>
+
+    <color name="grey_bg">#eee</color>
 
 </resources>

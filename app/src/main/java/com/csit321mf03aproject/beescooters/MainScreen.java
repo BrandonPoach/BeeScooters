@@ -22,6 +22,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
@@ -52,8 +54,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class MainScreen extends AppCompatActivity
         implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+
+    //private SharedPreferences.Editor editor;
+    SharedPreferences preferences;
 
     private static final String TAG = MainScreen.class.getSimpleName();
     private GoogleMap mMap;
@@ -84,20 +91,15 @@ public class MainScreen extends AppCompatActivity
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
-    // Used for selecting the current place.
-    //private static final int M_MAX_ENTRIES = 5;
-    //private String[] mLikelyPlaceNames;
-    //private String[] mLikelyPlaceAddresses;
-    //private String[] mLikelyPlaceAttributions;
-    //private LatLng[] mLikelyPlaceLatLngs;
-
     RequestQueue requestQueue;
     private static final String URL = "http://beescooters.net/admin/scooterLocations.php";
-    private static final String googleDirectionsRequestsUrl = "https://maps.googleapis.com/maps/api/directions/json?";
+    private static final String GOOGLE_DIRECTIONS_REQUEST_URL = "https://maps.googleapis.com/maps/api/directions/json?";
+    private static final String GOOGLE_DISTANCE_MATRIX_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric";
 
     double destinationLatitude, destinationLongitude;
 
-    private Polyline line;
+    ImageView imgQuestionMark;
+    String creditBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,10 @@ public class MainScreen extends AppCompatActivity
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_main_screen);
 
+        preferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        creditBalance = preferences.getString("creditBalance", "ERROR getting user credit balance");
+
+
         //Navigation Drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -114,8 +120,16 @@ public class MainScreen extends AppCompatActivity
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
+        imgQuestionMark = findViewById(R.id.toolbarQuestionMark);
+        imgQuestionMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainScreen.this, HowToRide2Screen.class);
+                startActivity(intent);
+            }
+        });
 
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -130,7 +144,7 @@ public class MainScreen extends AppCompatActivity
 
                             //Payment
                             case R.id.nav_payment:
-                                startActivity(new Intent(MainScreen.this, Payment_Screen.class));
+                                startActivity(new Intent(MainScreen.this, AddCreditScreen.class));
                                 break;
 
                             //Ride History
@@ -204,14 +218,14 @@ public class MainScreen extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //function to retrieve scooter location from db
     public void sendJsonRequest ()
     {
         int height = 100;
         int width = 100;
-        BitmapDrawable bitmapdraw=(BitmapDrawable)getDrawable(R.drawable.scooter_icon);
+        BitmapDrawable bitmapdraw=(BitmapDrawable)getDrawable(R.drawable.scooter_icon); //scooter icon in map
         Bitmap b=bitmapdraw.getBitmap();
         final Bitmap scooterMarker = Bitmap.createScaledBitmap(b, width, height, false);
-
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Method.POST, URL, null, new Response.Listener<JSONArray>() {
             @Override
@@ -228,6 +242,8 @@ public class MainScreen extends AppCompatActivity
                         double longitude = coordinateObject.getDouble("longitude");
 
                         Log.d("BEE_LATLONG", "lat : " + String.valueOf(latitude));
+
+                        //add marker on map for each object received
                         mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(latitude, longitude))
                                 .icon(BitmapDescriptorFactory.fromBitmap(scooterMarker)));
@@ -262,30 +278,6 @@ public class MainScreen extends AppCompatActivity
     }
 
     /**
-     * Sets up the options menu.
-     * @param menu The options menu.
-     * @return Boolean.
-     */
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.current_place_menu, menu);
-        return true;
-    }*/
-
-    /**
-     * Handles a click on the menu option to get a place.
-     * @param item The menu item to handle.
-     * @return Boolean.
-     */
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.option_get_place) {
-            showCurrentPlace();
-        }
-        return true;
-    }*/
-
-    /**
      * Manipulates the map when it's available.
      * This callback is triggered when the map is ready to be used.
      */
@@ -308,34 +300,6 @@ public class MainScreen extends AppCompatActivity
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
-        // Use a custom info window adapter to handle multiple lines of text in the
-        // info window contents.
-        /*mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            @Override
-            // Return null here, so that getInfoContents() is called next.
-            public View getInfoWindow(Marker arg0) {
-                return null;
-            }
-
-            @Override
-            public View getInfoContents(Marker marker) {
-                // Inflate the layouts for the info window, title and snippet.
-                View infoWindow = getLayoutInflater().inflate(R.layout.custom_info_contents,
-                        (FrameLayout) findViewById(R.id.map), false);
-
-                TextView title = ((TextView) infoWindow.findViewById(R.id.title));
-                title.setText(marker.getTitle());
-
-                TextView snippet = ((TextView) infoWindow.findViewById(R.id.snippet));
-                snippet.setText(marker.getSnippet());
-
-                return infoWindow;
-            }
-        });*/
-
-
-
         // Prompt the user for permission.
         getLocationPermission();
 
@@ -349,7 +313,6 @@ public class MainScreen extends AppCompatActivity
 
         mMap.setOnMarkerClickListener(this);
     }
-
 
 
     /**
@@ -428,123 +391,13 @@ public class MainScreen extends AppCompatActivity
         updateLocationUI();
     }
 
-    /**
-     * Prompts the user to select the current place from a list of likely places, and shows the
-     * current place on the map - provided the user has granted location permission.
-     */
-    /*private void showCurrentPlace() {
-        if (mMap == null) {
-            return;
-        }
-
-        if (mLocationPermissionGranted) {
-            // Get the likely places - that is, the businesses and other points of interest that
-            // are the best match for the device's current location.
-            @SuppressWarnings("MissingPermission") final Task<PlaceLikelihoodBufferResponse> placeResult =
-                    mPlaceDetectionClient.getCurrentPlace(null);
-            placeResult.addOnCompleteListener
-                    (new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
-                        @Override
-                        public void onComplete(@NonNull Task<PlaceLikelihoodBufferResponse> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
-
-                                // Set the count, handling cases where less than 5 entries are returned.
-                                int count;
-                                if (likelyPlaces.getCount() < M_MAX_ENTRIES) {
-                                    count = likelyPlaces.getCount();
-                                } else {
-                                    count = M_MAX_ENTRIES;
-                                }
-
-                                int i = 0;
-                                mLikelyPlaceNames = new String[count];
-                                mLikelyPlaceAddresses = new String[count];
-                                mLikelyPlaceAttributions = new String[count];
-                                mLikelyPlaceLatLngs = new LatLng[count];
-
-                                for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                                    // Build a list of likely places to show the user.
-                                    mLikelyPlaceNames[i] = (String) placeLikelihood.getPlace().getName();
-                                    mLikelyPlaceAddresses[i] = (String) placeLikelihood.getPlace()
-                                            .getAddress();
-                                    mLikelyPlaceAttributions[i] = (String) placeLikelihood.getPlace()
-                                            .getAttributions();
-                                    mLikelyPlaceLatLngs[i] = placeLikelihood.getPlace().getLatLng();
-
-                                    i++;
-                                    if (i > (count - 1)) {
-                                        break;
-                                    }
-                                }
-
-                                // Release the place likelihood buffer, to avoid memory leaks.
-                                likelyPlaces.release();
-
-                                // Show a dialog offering the user the list of likely places, and add a
-                                // marker at the selected place.
-                                openPlacesDialog();
-
-                            } else {
-                                Log.e(TAG, "Exception: %s", task.getException());
-                            }
-                        }
-                    });
-        } else {
-            // The user has not granted permission.
-            Log.i(TAG, "The user did not grant location permission.");
-
-            // Add a default marker, because the user hasn't selected a place.
-            mMap.addMarker(new MarkerOptions()
-                    .title(getString(R.string.default_info_title))
-                    .position(mDefaultLocation)
-                    .snippet(getString(R.string.default_info_snippet)));
-
-            // Prompt the user for permission.
-            getLocationPermission();
-        }
-    }*/
-
-    /**
-     * Displays a form allowing the user to select a place from a list of likely places.
-     */
-    /*private void openPlacesDialog() {
-        // Ask the user to choose the place where they are now.
-        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // The "which" argument contains the position of the selected item.
-                LatLng markerLatLng = mLikelyPlaceLatLngs[which];
-                String markerSnippet = mLikelyPlaceAddresses[which];
-                if (mLikelyPlaceAttributions[which] != null) {
-                    markerSnippet = markerSnippet + "\n" + mLikelyPlaceAttributions[which];
-                }
-
-                // Add a marker for the selected place, with an info window
-                // showing information about that place.
-                mMap.addMarker(new MarkerOptions()
-                        .title(mLikelyPlaceNames[which])
-                        .position(markerLatLng)
-                        .snippet(markerSnippet));
-
-                // Position the map's camera at the location of the marker.
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng,
-                        DEFAULT_ZOOM));
-            }
-        };
-
-        // Display the dialog.
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.pick_place)
-                .setItems(mLikelyPlaceNames, listener)
-                .show();
-    }*/
 
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
 
     public static Polyline pLine = null;
+    public static String markerDistance = "";
     private void updateLocationUI() {
         if (mMap == null) {
             return;
@@ -564,29 +417,48 @@ public class MainScreen extends AppCompatActivity
         }
     }
 
+    public static String mDistance = "";
+    //when user clicks on a marker
     @Override
     public boolean onMarkerClick(Marker marker) {
 
+        //remove previous direction line
         if (pLine != null)
             pLine.remove();
 
+        //set destination coordinates
         destinationLatitude = marker.getPosition().latitude;
         destinationLongitude = marker.getPosition().longitude;
 
-        String url;
+        String url, url2;
 
         Object dataTransfer[] = new Object[2];
         dataTransfer = new Object[3];
-        url = getDirectionsUrl();
+        url = getDirectionsUrl(1);   //retrieve directions URL which will be sent to Google
 
-        if (url != " "){
-
+        if (url != " ")
+        {
             GetDirectionsData getDirectionsData = new GetDirectionsData();
             dataTransfer[0] = mMap;
             dataTransfer[1] = url;
             dataTransfer[2] = new LatLng(destinationLatitude, destinationLongitude);
-            getDirectionsData.execute(dataTransfer);
+
+            getDirectionsData.execute(dataTransfer);    //handles polyline drawing
+
+            Log.d("BEE_LOG", "1234");
+
+            url2 = getDirectionsUrl(2);
+
+            GetDistanceData getDistanceData = new GetDistanceData();
+            getDistanceData.execute(url2);
+
+            Bundle args = new Bundle();
+            args.putString("batteryLevel", "80");
+            args.putString("distanceAway", mDistance);
+
+            //shows bottom fragment sheet
             ScooterInfoSheet scooterInfoSheet = new ScooterInfoSheet();
+            scooterInfoSheet.setArguments(args);
             scooterInfoSheet.show(getSupportFragmentManager(), "scooterBottomSheet");
         }
         else
@@ -595,31 +467,75 @@ public class MainScreen extends AppCompatActivity
         return false;
     }
 
-    private String getDirectionsUrl () {
-        StringBuilder googleDirectionsUrl = new StringBuilder(googleDirectionsRequestsUrl);
+    //returns directions URL that will be sent to Google to get directions from A to B
+    private String getDirectionsUrl (int mode)
+    {
 
         //sometimes it loads slow so it might be null object
-        if (mLastKnownLocation ==  null)
+        if (mode == 1)
         {
-            return " ";
+            StringBuilder googleDirectionsUrl = new StringBuilder(GOOGLE_DIRECTIONS_REQUEST_URL);
+            if (mLastKnownLocation ==  null)
+            {
+                getDeviceLocation();
+                return " ";
+            }
+
+            else
+            {
+                //append user current location to origin part of request
+                googleDirectionsUrl.append("origin=" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
+                //append marker LatLong to destination part of request
+                googleDirectionsUrl.append("&destination=" + destinationLatitude + "," + destinationLongitude);
+                //append the mode of directions, by default is driving but we want walking
+                googleDirectionsUrl.append("&mode=walking");
+                //append our key to key part of request
+                googleDirectionsUrl.append("&key=" + "AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
+                return googleDirectionsUrl.toString();
+            }
         }
 
         else
         {
-            //append user current location to origin part of request
-            googleDirectionsUrl.append("origin=" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
-            //append marker LatLong to destination part of request
-            googleDirectionsUrl.append("&destination=" + destinationLatitude + "," + destinationLongitude);
-            //append our key to key part of request
-            googleDirectionsUrl.append("&key=" + "AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
-            return googleDirectionsUrl.toString();
+
+            StringBuilder googleDirectionsUrl = new StringBuilder(GOOGLE_DISTANCE_MATRIX_URL);
+            if (mLastKnownLocation == null)
+            {
+                getDeviceLocation();
+                return " ";
+            }
+
+            else
+            {
+                Log.d("LAST_KNOWN", mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
+                Log.d("DESTINATION", destinationLatitude + "," + destinationLongitude);
+                //append user current location to origin part of request
+                googleDirectionsUrl.append("&origins=" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
+                //append marker LatLong to destination part of request
+                googleDirectionsUrl.append("&destinations=" + destinationLatitude + "," + destinationLongitude);
+                //append our key to key part of request
+                googleDirectionsUrl.append("&key=" + "AIzaSyCeMyu0c-om4RLulVbn5uKIeYCv2-qxZBU");
+
+                return googleDirectionsUrl.toString();
+            }
         }
+
     }
 
     public void startQRCodeScanner (View v)
     {
-        //User clicked RIDE, jump to QR Code Scanner
-        Intent intent = new Intent(this, QRCodeScannerScreen.class);
-        startActivity(intent);
+        //user credit balance under 2 dollars, dont allow them to ride
+        if (Double.valueOf(creditBalance) <= 2.0)
+        {
+            Toast.makeText(this, "Your credit balance is too low. You need more than 2AUD to Ride. Proceed to Add Credit Menu.", Toast.LENGTH_SHORT).show();
+        }
+
+        else
+        {
+            //User clicked RIDE, jump to QR Code Scanner
+            Intent intent = new Intent(this, QRCodeScannerScreen.class);
+            startActivity(intent);
+        }
+
     }
 }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+//just a normal static information screen
 public class Safety2Screen extends AppCompatActivity{
 
     private Button button;
@@ -15,7 +16,8 @@ public class Safety2Screen extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.safety2_screen);
 
-        button = (Button) findViewById(R.id.button);
+        getSupportActionBar().setTitle("Safety");
+        button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

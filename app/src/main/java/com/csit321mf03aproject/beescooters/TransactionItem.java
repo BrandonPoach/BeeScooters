@@ -2,6 +2,7 @@ package com.csit321mf03aproject.beescooters;
 
 import java.util.Date;
 
+//class to store transaction item data
 public class TransactionItem {
 
     private String date, tripTime, amount;

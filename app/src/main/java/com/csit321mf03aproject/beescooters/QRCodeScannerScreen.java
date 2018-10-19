@@ -85,19 +85,8 @@ public class QRCodeScannerScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qr_code_scanner_screen);
 
+        getSupportActionBar().setTitle("Scan QR Code");
         checkQRCode();
-        //Formatting text for display
-        //TextView txtRelaunch = findViewById(R.id.txtRelaunch);
-        //String relaunchTxt = txtRelaunch.getText().toString();
-        //SpannableString ss = new SpannableString(relaunchTxt);
-        //ForegroundColorSpan fcsYellow = new ForegroundColorSpan(505050);
-        //ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 3, 28, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 36, 41, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 46, 54, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        //ss.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 60, 71, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        //txtRelaunch.setText(ss);
-
 
         cameraPreview = findViewById(R.id.cameraPreview);
         txtResult = findViewById(R.id.txtResult);
@@ -164,6 +153,7 @@ public class QRCodeScannerScreen extends AppCompatActivity {
                             //(qrCode.valueAt(0).displayValue);
                             String exists = qrCodeMap.get(qrCode.valueAt(0).displayValue);
 
+                            //valid qr code
                             if (exists != null) {
                                 Intent intent = new Intent(QRCodeScannerScreen.this, RidingScreen.class);
                                 //send scooterID to RidingScreen

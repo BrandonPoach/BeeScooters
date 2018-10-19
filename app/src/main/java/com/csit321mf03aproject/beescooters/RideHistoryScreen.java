@@ -32,8 +32,6 @@ public class RideHistoryScreen extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    //private List <TransactionItem> transactionItem;
     private List <ListItems> lItems;
     RequestQueue requestQueue;
     SharedPreferences sharedPreferences;
@@ -45,12 +43,7 @@ public class RideHistoryScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ride_history_screen);
 
-        Toolbar toolbar = findViewById(R.id.ride_history_toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setTitle("Ride History");
-
+        getSupportActionBar().setTitle("Ride History");
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
@@ -58,7 +51,6 @@ public class RideHistoryScreen extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        //transactionItem = new ArrayList<>();
         lItems = new ArrayList<>();
         sharedPreferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         userID = sharedPreferences.getString("userID", "Error Getting User ID!");
@@ -67,6 +59,7 @@ public class RideHistoryScreen extends AppCompatActivity {
 
     }
 
+    //function to get transaction history data from database
     private void getRecyclerViewData ()
     {
         requestQueue = Volley.newRequestQueue(this);
@@ -91,14 +84,18 @@ public class RideHistoryScreen extends AppCompatActivity {
                                     transactionObject.getString("tripTime"),
                                     transactionObject.getString("amount"));
                             Log.d("TEMP2", ""+transactionObject.getString("userID"));
+
+                            //if previous date is different from current object date means need to create new date header
                             if (!tempDate.equals(transactionObject.getString("transDate")))
                             {
                                 tempDate = item.getDate();
                                 ListItems listItem = new ListItems();
+                                //setTag getting value and setObject getting null means this will be a inflated date header
                                 listItem.setTAG((tempDate));
                                 listItem.setObject(null);
                                 lItems.add(listItem);
 
+                                //setTag getting null and setObject getting object means this will be an inflated cardview
                                 ListItems listItem2 = new ListItems();
                                 listItem2.setObject(item);
                                 listItem2.setTAG(null);
@@ -107,7 +104,7 @@ public class RideHistoryScreen extends AppCompatActivity {
                                 Log.d("RH1", ""+tempDate);
                                 Log.d("RH3", ""+transactionObject.getString("transDate"));
                             }
-
+                            //current object date is the same as previous object date so can just add it under the same header
                             else
                             {
                                 tempDate = item.getDate();

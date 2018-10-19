@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
@@ -21,9 +22,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RidingScreen extends AppCompatActivity {
 
@@ -43,14 +54,17 @@ public class RidingScreen extends AppCompatActivity {
     private final static int MSG_UPDATE_TIME = 0;
 
     private static String scooterID;
+    private final  String URL = "http://beescooters.net/admin/setScooterStatus.php";
+    HashMap<String, String> paramHash;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.riding_screen);
 
-        timerButton = (Button)findViewById(R.id.timer_button);
+        getSupportActionBar().setTitle("Ride");
+        timerButton = findViewById(R.id.timer_button);
         timerTextView = findViewById(R.id.timer_text_view);
-        infoText = (TextView)findViewById(R.id.info_text);
+        infoText = findViewById(R.id.info_text);
 
         Bundle scooter_id = getIntent().getExtras();
         if(scooter_id == null) {
@@ -75,7 +89,7 @@ public class RidingScreen extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        updateUIStopRun();
+        //updateUIStopRun();
         if (serviceBound) {
             // If a timer is active, foreground the service, otherwise kill the service
             if (timerService.isTimerRunning()) {
@@ -84,14 +98,20 @@ public class RidingScreen extends AppCompatActivity {
             else {
                 stopService(new Intent(this, TimerService.class));
             }
+
             // Unbind the service
             unbindService(mConnection);
             serviceBound = false;
         }
     }
 
+    //when Start Timer button is clicked
     public void runButtonClick(View v) {
         if (serviceBound && !timerService.isTimerRunning()) {
+
+            //set scooter status to Used
+            changeScooterStatus ();
+
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
                 Log.v(TAG, "Starting timer");
             }
@@ -103,30 +123,23 @@ public class RidingScreen extends AppCompatActivity {
                 Log.v(TAG, "Stopping timer");
             }
             timerService.stopTimer();
-            updateUIStopRun();
+            //updateUIStopRun();
         }
     }
 
-    /**
-     * Updates the UI when a run starts
-     */
+    //Update UI when timer starts
     private void updateUIStartRun() {
         mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
-        timerButton.setText("STOP");
+        timerButton.setText("LOCK");
         infoText.setText("Your current Trip Time....");
     }
 
-    /**
-     * Updates the UI when a run stops
-     */
-    private void updateUIStopRun() {
-        mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
-        timerButton.setText("START");
-    }
+//    private void updateUIStopRun() {
+//        mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
+//        timerButton.setText("START");
+//    }
 
-    /**
-     * Updates the timer readout in the UI; the service must be bound
-     */
+    //Updates timer UI which displays in H : M : S
     private void updateUITimer() {
         if (serviceBound) {
             long secs = timerService.elapsedTime();
@@ -138,9 +151,7 @@ public class RidingScreen extends AppCompatActivity {
         }
     }
 
-    /**
-     * Callback for service binding, passed to bindService()
-     */
+    //Callback for service binding, passed to bindService()
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
@@ -168,10 +179,7 @@ public class RidingScreen extends AppCompatActivity {
         }
     };
 
-    /**
-     * When the timer is running, use this handler to update
-     * the UI every second to show timer progress
-     */
+    //When timer is running, this handler updates the UI every second to show timer progress
     static class UIUpdateHandler extends Handler {
 
         private final static int UPDATE_RATE_MS = 1000;
@@ -191,6 +199,61 @@ public class RidingScreen extends AppCompatActivity {
                 sendEmptyMessageDelayed(MSG_UPDATE_TIME, UPDATE_RATE_MS);
             }
         }
+    }
+
+    private void changeScooterStatus ()
+    {
+        paramHash = new HashMap<>();
+        paramHash.put("scooterID", scooterID);
+
+        RequestQueue queue = Volley.newRequestQueue(RidingScreen.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("NO_ERROR", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("BEE_LOGS10", error.toString());
+                error.printStackTrace();
+            }
+        })
+        {
+            // Ctrl + O
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                if (paramHash == null)
+                {
+                    return null;
+                }
+
+                //moving over all data from HashMap paramHash to Map params
+                Map<String, String> params = new HashMap<>();
+                for (String key:paramHash.keySet())
+                {
+                    params.put(key,paramHash.get(key));
+                }
+                return params;
+            }
+
+            // Ctrl + O
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map <String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        //add request to queue
+        queue.add(stringRequest);
+        Log.d("BEE_LOGS", stringRequest.toString());
     }
 
     /**
@@ -253,51 +316,32 @@ public class RidingScreen extends AppCompatActivity {
             }
         }
 
-        /**
-         * Starts the timer
-         */
+        //Starts timer
         public void startTimer() {
-            if (!isTimerRunning) {
-                startTime = System.currentTimeMillis();
-                isTimerRunning = true;
-            }
-            else {
-                Log.e(TAG, "startTimer request for an already running timer");
-            }
+            startTime = System.currentTimeMillis();
+            isTimerRunning = true;
         }
 
-        /**
-         * Stops the timer
-         */
+        //stop timer
         public void stopTimer() {
-            if (isTimerRunning) {
-                endTime = System.currentTimeMillis();
-                isTimerRunning = false;
+            endTime = System.currentTimeMillis();
+            isTimerRunning = false;
 
-                int elapsedSeconds = (int)elapsedTime();
-                //goto payment screen and pass the time elapsed
-                Intent intent  = new Intent (this, Payment_Screen.class);
-                intent.putExtra("TRIP_TIME", elapsedSeconds);
-                intent.putExtra("SCOOTER_ID", scooterID);
-                startActivity(intent);
-            }
-            else {
-                Log.e(TAG, "stopTimer request for a timer that isn't running");
-            }
+            int elapsedSeconds = (int)elapsedTime();
+            //goto ride summary screen and pass trip time and scooter id
+            Intent intent  = new Intent (this, RideSummaryScreen.class);
+            intent.putExtra("TRIP_TIME", elapsedSeconds);
+            intent.putExtra("SCOOTER_ID", scooterID);
+
+            startActivity(intent);
         }
 
-        /**
-         * @return whether the timer is running
-         */
+        //returns boolean value on whether the timer is running
         public boolean isTimerRunning() {
             return isTimerRunning;
         }
 
-        /**
-         * Returns the  elapsed time
-         *
-         * @return the elapsed time in seconds
-         */
+        //return elapsed time in seconds
         public long elapsedTime() {
             // If the timer is running, the end time will be zero
             return endTime > startTime ?
@@ -305,29 +349,22 @@ public class RidingScreen extends AppCompatActivity {
                     (System.currentTimeMillis() - startTime) / 1000;
         }
 
-        /**
-         * Place the service into the foreground
-         */
+        //Place service in foreground
         public void foreground() {
             startForeground(NOTIFICATION_ID, createNotification());
         }
 
-        /**
-         * Return the service to the background
-         */
+        //Bring back service to Background
         public void background() {
             stopForeground(true);
         }
 
-        /**
-         * Creates a notification for placing the service into the foreground
-         *
-         * @return a notification for interacting with the service when in the foreground
-         */
+
+        //create notification for the service
         private Notification createNotification() {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "123")
                     .setContentTitle("Ride Started")
-                    .setContentText("Tap to return to the trip timer")
+                    .setContentText("Tap to return to Ride")
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
@@ -337,6 +374,7 @@ public class RidingScreen extends AppCompatActivity {
                             PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(resultPendingIntent);
 
+            //code to make Notification work on Android Oreo and above
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CharSequence name = "Timer";
                 String description = "Timer Working";

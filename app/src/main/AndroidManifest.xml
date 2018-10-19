@@ -25,6 +25,9 @@
     <!-- For Job Scheduler -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- For Account Page -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -34,28 +37,59 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".SplashScreen"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainScreen" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
+        <activity android:name=".MainScreen" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
-        <activity android:name=".ParkingScreen" />
-        <activity android:name=".AccountScreen" />
-        <activity android:name=".ParkingScreen2" />
+
+        <activity android:name=".ParkingScreen"
+            android:parentActivityName=".ParkingScreen2"/>
+
+        <activity android:name=".AccountScreen"
+            android:parentActivityName=".MainScreen"/>
+
+        <activity android:name=".ParkingScreen2"
+            android:parentActivityName=".Safety2Screen"/>
+
         <activity android:name=".SafetyScreen" />
-        <activity android:name=".Safety2Screen" />
-        <activity android:name=".HowToRideScreen" />
-        <activity android:name=".HowToRide2Screen" />
-        <activity android:name=".EndingTripScreen" />
+
+        <activity android:name=".Safety2Screen"
+            android:parentActivityName=".HowToRideScreen"/>
+
+        <activity android:name=".HowToRideScreen"
+            android:parentActivityName=".ScanCode"/>
+
+        <activity android:name=".HowToRide2Screen"
+            android:parentActivityName=".MainScreen"/>
+
+        <activity android:name=".EndingTripScreen"
+            android:parentActivityName=".ParkingScreen"/>
+
+        <activity android:name=".AddCreditScreen"
+            android:parentActivityName=".MainScreen"/>
+
         <activity android:name=".Payment_Screen" />
-        <activity android:name=".QRCodeScannerScreen" />
-        <activity android:name=".RidingScreen" />
-        <activity android:name=".ScanCode" />
-        <activity android:name=".RideHistoryScreen" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
+        <activity android:name=".QRCodeScannerScreen"
+            android:parentActivityName=".MainScreen"/>
+
+        <activity android:name=".RidingScreen"
+            android:parentActivityName=".QRCodeScannerScreen"/>
+
+        <activity android:name=".ScanCode"
+            android:parentActivityName=".HowToRide2Screen"/>
+
+        <activity android:name=".RideHistoryScreen"
+            android:parentActivityName=".MainScreen"/>
+
+        <activity android:name=".RideSummaryScreen" />
+
         <activity android:name=".LoginScreen"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/title_activity_login_screen"/>
@@ -71,9 +105,15 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".ChronometerJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.csit321mf03aproject.beescooters.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <meta-data
             android:name="preloaded_fonts"

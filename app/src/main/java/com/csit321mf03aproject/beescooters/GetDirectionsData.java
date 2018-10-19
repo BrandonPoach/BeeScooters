@@ -11,15 +11,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GetDirectionsData extends AsyncTask<Object,String,String> {
 
     GoogleMap mMap;
     String url;
     String googleDirectionsData;
-    String duration, distance;
+    String distance;
     LatLng latLng;
     private Polyline line;
 
@@ -30,15 +28,15 @@ public class GetDirectionsData extends AsyncTask<Object,String,String> {
         url = (String)objects[1];
         latLng = (LatLng)objects[2];
 
-        Log.d("PARSE_ERROR", " lol " + url);
-
-        DownloadUrl downloadUrl = new DownloadUrl();
-        try {
-            googleDirectionsData = downloadUrl.readUrl(url);
+        GoogleUrl googleUrl = new GoogleUrl();
+        try
+        {
+            googleDirectionsData = googleUrl.readUrl(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        //contains step by step direction on how to get to destination in JSON
         return googleDirectionsData;
     }
 
@@ -47,7 +45,7 @@ public class GetDirectionsData extends AsyncTask<Object,String,String> {
 
         String[] directionsList;
         DataParser parser = new DataParser();
-        Log.d("PARSE_ERROR", " lol " + s);
+        Log.d("PARSE_ERROR", "#"+ s);
         directionsList = parser.parseDirections(s);
         displayDirection(directionsList);
     }
@@ -61,14 +59,13 @@ public class GetDirectionsData extends AsyncTask<Object,String,String> {
 
         for(int i = 0;i<count;i++)
         {
-            options.color(Color.YELLOW);
+            options.color(Color.YELLOW);    //use yellow lines in accordance to app theme
             options.width(10);
             options.addAll(PolyUtil.decode(directionsList[i]));
         }
 
-        line = mMap.addPolyline(options);
-        MainScreen.pLine = line;
-
+        line = mMap.addPolyline(options);   //add options to polyline
+        MainScreen.pLine = line;    //set Mainscreen polyline to current line
 
     }
 

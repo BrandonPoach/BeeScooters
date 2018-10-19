@@ -80,7 +80,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_menu_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio1/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_monetization_on_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -91,7 +91,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="787878" />
-                            <entry key="outputName" value="ic_menu" />
+                            <entry key="outputName" value="ic_money" />
                             <entry key="sourceFile" value="C:\Program Files\Android\Android Studio\bin\C:\Users\Brandon" />
                           </map>
                         </option>

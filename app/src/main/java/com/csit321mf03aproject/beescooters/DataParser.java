@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DataParser {
-    private HashMap<String,String> getDuration(JSONArray googleDirectionsJson)
+
+    /*private HashMap<String,String> getDuration(JSONArray googleDirectionsJson)
     {
         HashMap<String,String> googleDirectionsMap = new HashMap<>();
         String duration = "";
         String distance ="";
-
 
         try {
 
@@ -34,7 +34,6 @@ public class DataParser {
 
         return googleDirectionsMap;
     }
-
 
     private HashMap<String, String> getPlace(JSONObject googlePlaceJson)
     {
@@ -119,7 +118,7 @@ public class DataParser {
         }
 
         return getPlaces(jsonArray);
-    }
+    }*/
 
     public String[] parseDirections(String jsonData)
     {
@@ -127,7 +126,9 @@ public class DataParser {
         JSONObject jsonObject;
 
         try {
+            //convert String to JSONObject so can retrieve values inside
             jsonObject = new JSONObject(jsonData);
+            //convert to JsonArray
             jsonArray = jsonObject.getJSONArray("routes").getJSONObject(0).getJSONArray("legs").getJSONObject(0).getJSONArray("steps");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -138,10 +139,11 @@ public class DataParser {
 
     public String[] getPaths(JSONArray googleStepsJson )
     {
-        int count = googleStepsJson.length();
-        String[] polylines = new String[count];
+        int num = googleStepsJson.length();
+        String[] polylines = new String[num];
 
-        for(int i = 0;i<count;i++)
+        //loop to retrieve all polylines contained in JSONArray so that one long complete polyline can be drawn
+        for(int i = 0;i<num;i++)
         {
             try {
                 polylines[i] = getPath(googleStepsJson.getJSONObject(i));
@@ -157,6 +159,7 @@ public class DataParser {
     {
         String polyline = "";
         try {
+            //retrieve individual polyline object and assign to String
             polyline = googlePathJson.getJSONObject("polyline").getString("points");
         } catch (JSONException e) {
             e.printStackTrace();

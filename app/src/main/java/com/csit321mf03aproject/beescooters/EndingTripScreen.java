@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+//just a normal static information screen
 public class EndingTripScreen extends AppCompatActivity{
 
     private SharedPreferences preferences;
@@ -19,6 +20,7 @@ public class EndingTripScreen extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.endingtrip_screen);
 
+        getSupportActionBar().setTitle("Safety");
         preferences = getSharedPreferences("MYPREFS",MODE_PRIVATE);
         button = findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {

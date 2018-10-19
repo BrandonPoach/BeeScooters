@@ -10,46 +10,55 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class DownloadUrl {
+//class to send directions URL to Google and retrieve result
+public class GoogleUrl {
+
     public String readUrl(String myUrl) throws IOException
     {
         String data = "";
         InputStream inputStream = null;
         HttpURLConnection urlConnection = null;
         try {
+            //open connection with URL
             URL url = new URL(myUrl);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.connect();
 
+            //read response from URL
             inputStream = urlConnection.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuffer sb = new StringBuffer();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuffer stringBuffer = new StringBuffer();
 
             String line = "";
-            while((line = br.readLine()) != null)
+            while((line = bufferedReader.readLine()) != null)
             {
-                sb.append(line);
+                stringBuffer.append(line);
 
             }
 
-            data = sb.toString();
-            Log.d("downloadUrl", data.toString());
+            data = stringBuffer.toString();
+            Log.d("downloadUrl", data);
 
-            br.close();
+            bufferedReader.close();
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }
+
+        catch (MalformedURLException e)
+        {
             e.printStackTrace();
         }
+
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
         finally {
             if(inputStream != null)
                 inputStream.close();
             urlConnection.disconnect();
         }
 
-        Log.d("data downlaod",data);
+        Log.d("data downloaded",data);
         return data;
-
     }
 }

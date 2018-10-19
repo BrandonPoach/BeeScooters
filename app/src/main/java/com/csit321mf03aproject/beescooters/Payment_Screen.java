@@ -185,7 +185,7 @@ public class Payment_Screen extends AppCompatActivity {
        }
     }
 
-    //need to add code to save user payment method
+
     //https://github.com/braintree/braintree-android-drop-in
 
     //function to send payments to my server
