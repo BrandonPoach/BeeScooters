@@ -7,12 +7,11 @@ Bee Scooters is a proof of concept electronic scooter sharing application. With 
 
 ## Getting Started
 
-To get started, import this project from GitHub using Git or download the ZIP file. Once imported, open the project with Android Studio and build it. Alternatively, you can find the debug apk file at BeeScooters\app\build\outputs\apk and install on an Android phone.
+To get started, import this project from GitHub using Git or download the ZIP file. Once imported, open the project with Android Studio and build it. Alternatively, you can find the debug apk file at BeeScooters\app\build\outputs\apk and install it on an Android phone.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
+The minimum SDK version required for this application is 23 and the target version is 28. This means that it is recommended for you have a Android phone or emulator running Android Marshmellow and above to run this application on.
 
 ```
 Give examples
@@ -76,16 +75,17 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **[Aaron Yean Chun Puah](https://github.com/nephorix)** 
+* Brandon Poach
+* Colin McdDonald
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed for personal use only.
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* [Priyanka Pakhale](https://github.com/priyankapakhale) <br/>
+Youtube video on Google Directions/Polylines
+* [Matt Sullivan](https://github.com/mjohnsullivan) <br/>
+Example of Long Running Timer
