@@ -3,15 +3,16 @@ Project File for Android App
 
 # Project Title
 
-One Paragraph of project description goes here
+Bee Scooters is a proof of concept electronic scooter sharing application. With this application users can view scooters that are located nearby to them and get directions on how to reach it. Once they have reached the scooter, all they have to do is scan the QR code and begin riding. This application implements third party APIs such as Google Maps and Braintree. Google Maps is used to display scooter locations and provide navigation while Braintree provides the payment gateway for users to add credits to their account.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+To get started, import this project from GitHub using Git or download the ZIP file. Once imported, open the project with Android Studio and build it. Alternatively, you can find the debug apk file at BeeScooters\app\build\outputs\apk and install on an Android phone.
 
 ### Prerequisites
 
 What things you need to install the software and how to install them
+
 
 ```
 Give examples
