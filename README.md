@@ -57,13 +57,13 @@ Give an example
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+To 
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Android Studio](https://developer.android.com/studio/) - Used as our Integrated Development Environment (IDE) for Android development.
+* [MySql](https://www.mysql.com/) - Used for our database
+* [phpMyAdmin](https://www.phpmyadmin.net/) - Used to manage administration of MySql
 
 ## Contributing
 
@@ -88,4 +88,4 @@ This project is licensed for personal use only.
 * [Priyanka Pakhale](https://github.com/priyankapakhale) <br/>
 Youtube video on Google Directions/Polylines
 * [Matt Sullivan](https://github.com/mjohnsullivan) <br/>
-Example of Long Running Timer
+Provided example of long running timer
