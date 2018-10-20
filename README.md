@@ -11,67 +11,33 @@ To get started, import this project from GitHub using Git or download the ZIP fi
 
 ### Prerequisites
 
-The minimum SDK version required for this application is 23 and the target version is 28. This means that it is recommended for you have a Android phone or emulator running Android Marshmellow and above to run this application on.
-
-```
-Give examples
-```
+The minimum SDK version required for this application is 23 and the target version is 28. This means you must have an Android phone or emulator running Android Marshmallow and above to be able to run application.
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+Downloading ZIP File
+1)	Download the zip file by clicking the Clone or Download button located at the top right of the GitHub page and unzip it.
+2)	After unzipping the project from GitHub. Open Android Studio and go to file File -> Open -> ProjectName. 
+3)	You can then run the application on your Android phone (connected to your computer) by building the project on it or by using an emulator/virtual device.  
+ 
+Using Git
+1.	In the Clone with HTTPs section, click  to copy the clone URL for the repository.
+2.	Install Git if you don’t already have it and Open Git Bash.
+3.	Change the current working directory to the location where you want the cloned directory to be made.
+4.	Type git clone, and then paste the URL you copied in Step 1.
 
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+Building the project
+1.	Once the project is open in Android Studio. Click the big green arrow to build the project on a connected device or emulator. For Android Studio to detect a connected device, developer settings must be enabled on the device beforehand. 
 
 ## Deployment
 
-To 
+Inapplicable to this project as it a student project and is not meant to be released to the public. However, details on how to release an Android Studio project on the Play Store can be found here [https://developer.android.com/studio/publish/app-signing](https://developer.android.com/studio/publish/app-signing).
 
 ## Built With
 
 * [Android Studio](https://developer.android.com/studio/) - Used as our Integrated Development Environment (IDE) for Android development.
 * [MySql](https://www.mysql.com/) - Used for our database
 * [phpMyAdmin](https://www.phpmyadmin.net/) - Used to manage administration of MySql
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
