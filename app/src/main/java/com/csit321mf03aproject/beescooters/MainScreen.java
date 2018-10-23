@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -61,6 +62,7 @@ public class MainScreen extends AppCompatActivity
 
     //private SharedPreferences.Editor editor;
     SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     private static final String TAG = MainScreen.class.getSimpleName();
     private GoogleMap mMap;
@@ -106,12 +108,26 @@ public class MainScreen extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
 
+
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_main_screen);
 
         preferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         creditBalance = preferences.getString("creditBalance", "ERROR getting user credit balance");
 
+        String className = preferences.getString("previousActivity", "");
+        Log.d("CLASS_NAME", className);
+        if (className != "") {
+            Class<?> activityClass;
+            try {
+                activityClass = Class.forName(className);
+            } catch (ClassNotFoundException e) {
+                activityClass = this.getClass();
+                e.printStackTrace();
+            }
+
+            startActivity(new Intent(this, activityClass));
+        }
 
         //Navigation Drawer
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -193,7 +209,7 @@ public class MainScreen extends AppCompatActivity
         }
 
         // Construct a GeoDataClient.
-       mGeoDataClient = Places.getGeoDataClient(this);
+        mGeoDataClient = Places.getGeoDataClient(this);
 
         // Construct a PlaceDetectionClient.
         mPlaceDetectionClient = Places.getPlaceDetectionClient(this);
@@ -207,6 +223,7 @@ public class MainScreen extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -364,6 +381,8 @@ public class MainScreen extends AppCompatActivity
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
+
+
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -385,13 +404,12 @@ public class MainScreen extends AppCompatActivity
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
+                    updateLocationUI();
                 }
             }
         }
-        updateLocationUI();
+
     }
-
-
     /**
      * Updates the map's UI settings based on whether the user has granted location permission.
      */
@@ -429,6 +447,7 @@ public class MainScreen extends AppCompatActivity
         //set destination coordinates
         destinationLatitude = marker.getPosition().latitude;
         destinationLongitude = marker.getPosition().longitude;
+        Log.d("BEE_LOG", ""+destinationLatitude + "#" + destinationLongitude);
 
         String url, url2;
 
@@ -445,21 +464,13 @@ public class MainScreen extends AppCompatActivity
 
             getDirectionsData.execute(dataTransfer);    //handles polyline drawing
 
-            Log.d("BEE_LOG", "1234");
-
             url2 = getDirectionsUrl(2);
 
             GetDistanceData getDistanceData = new GetDistanceData();
             getDistanceData.execute(url2);
 
-            Bundle args = new Bundle();
-            args.putString("batteryLevel", "80");
-            args.putString("distanceAway", mDistance);
 
-            //shows bottom fragment sheet
-            ScooterInfoSheet scooterInfoSheet = new ScooterInfoSheet();
-            scooterInfoSheet.setArguments(args);
-            scooterInfoSheet.show(getSupportFragmentManager(), "scooterBottomSheet");
+
         }
         else
             Log.d("NULL_EXCEPTION", "I am here");
@@ -470,7 +481,6 @@ public class MainScreen extends AppCompatActivity
     //returns directions URL that will be sent to Google to get directions from A to B
     private String getDirectionsUrl (int mode)
     {
-
         //sometimes it loads slow so it might be null object
         if (mode == 1)
         {
@@ -507,8 +517,8 @@ public class MainScreen extends AppCompatActivity
 
             else
             {
-                Log.d("LAST_KNOWN", mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
-                Log.d("DESTINATION", destinationLatitude + "," + destinationLongitude);
+                Log.d("LAST_KNOWN0", mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
+                Log.d("LAST_KNOWN2", destinationLatitude + "," + destinationLongitude);
                 //append user current location to origin part of request
                 googleDirectionsUrl.append("&origins=" + mLastKnownLocation.getLatitude() + "," + mLastKnownLocation.getLongitude());
                 //append marker LatLong to destination part of request
@@ -537,5 +547,61 @@ public class MainScreen extends AppCompatActivity
             startActivity(intent);
         }
 
+    }
+
+    public class GetDistanceData extends AsyncTask<String, String, String> {
+        String distanceURL, distance;
+
+        @Override
+        protected String doInBackground(String... strings) {
+            GoogleUrl googleUrl = new GoogleUrl();
+            try
+            {
+                distanceURL = googleUrl.readUrl(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            //contains step by step direction on how to get to destination in JSON
+            return distanceURL;
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            retrieveDistance(s);
+            Bundle args = new Bundle();
+            args.putString("batteryLevel", "80");
+            args.putString("distanceAway", distance);
+
+            //shows bottom fragment sheet
+            ScooterInfoSheet scooterInfoSheet = new ScooterInfoSheet();
+            scooterInfoSheet.setArguments(args);
+            scooterInfoSheet.show(getSupportFragmentManager(), "scooterBottomSheet");
+        }
+
+        public void retrieveDistance (String jsonData)
+        {
+            JSONArray jsonArray = null;
+            JSONObject jsonObject;
+            distance = "";
+            Log.d("LAST_KNOWN3", jsonData);
+
+            try
+            {
+                jsonObject = new JSONObject(jsonData);
+                jsonArray = jsonObject.getJSONArray("rows").getJSONObject(0).getJSONArray("elements");
+                jsonObject = jsonArray.getJSONObject(0).getJSONObject("distance");
+                distance = jsonObject.getString("text");
+                Log.d("JSONArray", ""+distance);
+            }
+
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }

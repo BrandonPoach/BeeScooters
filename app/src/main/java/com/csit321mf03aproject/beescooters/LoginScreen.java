@@ -19,6 +19,8 @@ public class LoginScreen extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
 
+        getSupportActionBar().setTitle("Login");
+
         btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnLogin);
         etEmail = findViewById(R.id.etEmail);
@@ -27,7 +29,7 @@ public class LoginScreen extends AppCompatActivity  {
         preferences = getSharedPreferences("MYPREFS",MODE_PRIVATE);
 
         if (preferences.getString("email", "") != ""){
-            Intent intent = new Intent(this,LoggingIn.class);
+            Intent intent = new Intent(this,MainScreen.class);
             startActivity(intent);
         }
 

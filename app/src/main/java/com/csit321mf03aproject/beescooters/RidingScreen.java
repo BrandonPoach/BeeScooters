@@ -9,6 +9,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,9 +40,11 @@ import java.util.Map;
 public class RidingScreen extends AppCompatActivity {
 
     private static final String TAG = RidingScreen.class.getSimpleName();
-
+    private SharedPreferences.Editor editor;
+    private SharedPreferences preferences;
     private TimerService timerService;
     private boolean serviceBound;
+    private boolean check = false;
 
     private Button timerButton;
     private TextView timerTextView;
@@ -57,11 +60,18 @@ public class RidingScreen extends AppCompatActivity {
     private final  String URL = "http://beescooters.net/admin/setScooterStatus.php";
     HashMap<String, String> paramHash;
 
+    //Dont allow user to press back button to QR Code Screen
+    @Override
+    public void onBackPressed() {
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.riding_screen);
 
         getSupportActionBar().setTitle("Ride");
+        preferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
+        editor = preferences.edit();
         timerButton = findViewById(R.id.timer_button);
         timerTextView = findViewById(R.id.timer_text_view);
         infoText = findViewById(R.id.info_text);
@@ -78,6 +88,7 @@ public class RidingScreen extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "Starting and binding service");
         }
@@ -89,6 +100,14 @@ public class RidingScreen extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+
+        if (!check)
+        {
+            editor.putString("previousActivity", getClass().getName());
+            editor.commit();
+        }
+
+
         //updateUIStopRun();
         if (serviceBound) {
             // If a timer is active, foreground the service, otherwise kill the service
@@ -122,6 +141,10 @@ public class RidingScreen extends AppCompatActivity {
             if (Log.isLoggable(TAG, Log.VERBOSE)) {
                 Log.v(TAG, "Stopping timer");
             }
+
+            check = true;
+            editor.putString("previousActivity", "");
+            editor.commit();
             timerService.stopTimer();
             //updateUIStopRun();
         }
@@ -133,11 +156,6 @@ public class RidingScreen extends AppCompatActivity {
         timerButton.setText("LOCK");
         infoText.setText("Your current Trip Time....");
     }
-
-//    private void updateUIStopRun() {
-//        mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
-//        timerButton.setText("START");
-//    }
 
     //Updates timer UI which displays in H : M : S
     private void updateUITimer() {
@@ -195,7 +213,11 @@ public class RidingScreen extends AppCompatActivity {
                 if (Log.isLoggable(TAG, Log.VERBOSE)) {
                     Log.v(TAG, "updating time");
                 }
-                activity.get().updateUITimer();
+
+                if (activity.get()!= null)
+                {
+                    activity.get().updateUITimer();
+                }
                 sendEmptyMessageDelayed(MSG_UPDATE_TIME, UPDATE_RATE_MS);
             }
         }

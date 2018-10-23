@@ -21,7 +21,6 @@ public class GetDirectionsData extends AsyncTask<Object,String,String> {
     LatLng latLng;
     private Polyline line;
 
-
     @Override
     protected String doInBackground(Object... objects) {
         mMap = (GoogleMap)objects[0];

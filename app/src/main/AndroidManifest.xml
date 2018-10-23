@@ -10,6 +10,7 @@
 
     package="com.example.currentplacedetailsonmap">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -80,7 +81,7 @@
             android:parentActivityName=".MainScreen"/>
 
         <activity android:name=".RidingScreen"
-            android:parentActivityName=".QRCodeScannerScreen"/>
+           />
 
         <activity android:name=".ScanCode"
             android:parentActivityName=".HowToRide2Screen"/>
@@ -90,11 +91,9 @@
 
         <activity android:name=".RideSummaryScreen" />
 
-        <activity android:name=".LoginScreen"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:label="@string/title_activity_login_screen"/>
+        <activity android:name=".LoginScreen" />
         <activity android:name=".LoggingIn" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
-        <activity android:name=".Register" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity android:name=".Register" />
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
             android:launchMode="singleTask">
             <intent-filter>

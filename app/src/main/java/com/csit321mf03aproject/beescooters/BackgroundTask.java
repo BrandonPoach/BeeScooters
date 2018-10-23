@@ -76,6 +76,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 editor.putString("flag","register");
                 editor.commit();
                 return "Successfully Registered " + regUsername;
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -208,7 +209,7 @@ public class BackgroundTask extends AsyncTask<String,Void,String> {
                 editor.putString("customerID", customerID);
                 editor.commit();
 
-                Intent intent = new Intent(context,LoggingIn.class);
+                Intent intent = new Intent(context,MainScreen.class);
                 context.startActivity(intent);
             }else{
                 display("Login Failed", "That email and password do not match our records.");

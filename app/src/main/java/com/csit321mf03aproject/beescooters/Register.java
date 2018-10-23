@@ -15,6 +15,8 @@ public class Register  extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setTitle("Registration");
         setContentView(R.layout.register_screen);
         etUsername = findViewById(R.id.etNewUsername);
         etFirstName = findViewById(R.id.etNewFirstName);

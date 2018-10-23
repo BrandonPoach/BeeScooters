@@ -236,7 +236,6 @@ public class AddCreditScreen extends AppCompatActivity {
         paramHash.put("firstName", firstName);
         paramHash.put("lastName", lastName);
 
-
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Receiving Token from Server...");
         progressDialog.show();
