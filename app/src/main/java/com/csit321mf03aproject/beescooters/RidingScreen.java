@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -60,11 +61,6 @@ public class RidingScreen extends AppCompatActivity {
     private final  String URL = "http://beescooters.net/admin/setScooterStatus.php";
     HashMap<String, String> paramHash;
 
-    //Dont allow user to press back button to QR Code Screen
-    @Override
-    public void onBackPressed() {
-    }
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.riding_screen);
@@ -82,6 +78,23 @@ public class RidingScreen extends AppCompatActivity {
         } else {
             scooterID = scooter_id.getString("SCOOTER_ID");
             Log.d("scooterID", ""+scooterID);
+        }
+    }
+
+    //Dont allow user to press back button to QR Code Screen
+    @Override
+    public void onBackPressed() {
+        if (serviceBound && !timerService.isTimerRunning())
+        {
+            //timer not running yet user should be able to go to Main Screen from Android Back button
+            Intent intent = new Intent(this, MainScreen.class);
+            startActivity(intent);
+        }
+
+        else if (serviceBound && timerService.isTimerRunning())
+        {
+            //timer is running dont allow user to use back button
+            Toast.makeText(this, "Ride in Progress", Toast.LENGTH_SHORT).show();
         }
     }
 

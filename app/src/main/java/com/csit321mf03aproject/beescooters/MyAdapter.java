@@ -99,7 +99,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             if (viewType == 0)
             {
                 textDateHeader = itemView.findViewById(R.id.dateHeader);
-
             }
 
             else if (viewType == 1) {
@@ -129,4 +128,5 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             return 1;
         }
     }
+
 }

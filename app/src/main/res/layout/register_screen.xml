@@ -11,8 +11,11 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             android:inputType="textPersonName"
             android:ems="10"
             android:id="@+id/etNewUsername"
@@ -21,8 +24,11 @@
             android:hint="Username" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             android:inputType="textPersonName"
             android:layout_below="@+id/etNewUsername"
             android:ems="10"
@@ -30,8 +36,11 @@
             android:hint="First Name" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             android:inputType="textPersonName"
             android:layout_below="@+id/etNewFirstName"
             android:ems="10"
@@ -39,8 +48,10 @@
             android:hint="Last Name" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:inputType="textPassword"
             android:ems="10"
             android:id="@+id/etNewPassword"
@@ -49,8 +60,11 @@
             android:hint="Password" />
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             android:id="@+id/etNewEmail"
             android:ems="10"
             android:layout_below="@+id/etNewLastName"
@@ -59,8 +73,11 @@
 
 
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="8dp"
             android:ems="10"
             android:id="@+id/etNewAddress"
             android:layout_below="@+id/etNewEmail"

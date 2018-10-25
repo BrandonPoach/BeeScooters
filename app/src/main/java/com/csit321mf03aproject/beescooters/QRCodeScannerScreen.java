@@ -161,7 +161,7 @@ public class QRCodeScannerScreen extends AppCompatActivity {
                                 startActivity(intent);
 
                             } else {
-                                Toast.makeText(QRCodeScannerScreen.this, "QR Code is INCORRECT!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(QRCodeScannerScreen.this, "QR Code is INCORRECT or Scooter is IN USE!", Toast.LENGTH_SHORT).show();
                                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                                     //Request Permission
                                     ActivityCompat.requestPermissions(QRCodeScannerScreen.this,

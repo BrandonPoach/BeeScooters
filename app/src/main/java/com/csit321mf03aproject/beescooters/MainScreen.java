@@ -26,11 +26,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -56,6 +59,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainScreen extends AppCompatActivity
         implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -63,7 +79,7 @@ public class MainScreen extends AppCompatActivity
     //private SharedPreferences.Editor editor;
     SharedPreferences preferences;
     private SharedPreferences.Editor editor;
-
+    HashMap<String, String> paramHash;
     private static final String TAG = MainScreen.class.getSimpleName();
     private GoogleMap mMap;
 
@@ -95,6 +111,7 @@ public class MainScreen extends AppCompatActivity
 
     RequestQueue requestQueue;
     private static final String URL = "http://beescooters.net/admin/scooterLocations.php";
+    private static final String URL2 = "http://beescooters.net/admin/accessToken.php";
     private static final String GOOGLE_DIRECTIONS_REQUEST_URL = "https://maps.googleapis.com/maps/api/directions/json?";
     private static final String GOOGLE_DISTANCE_MATRIX_URL = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric";
 
@@ -103,17 +120,22 @@ public class MainScreen extends AppCompatActivity
     ImageView imgQuestionMark;
     String creditBalance;
 
+    Result result = new Result();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_main_screen);
 
         preferences = this.getSharedPreferences("MYPREFS", Context.MODE_PRIVATE);
         creditBalance = preferences.getString("creditBalance", "ERROR getting user credit balance");
+        String access_token = preferences.getString("access_token", null);
+
+        if (access_token == null)
+            result = getAccessToken();
 
         String className = preferences.getString("previousActivity", "");
         Log.d("CLASS_NAME", className);
@@ -188,7 +210,9 @@ public class MainScreen extends AppCompatActivity
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.clear();
                                 editor.commit();
-                                startActivity(new Intent(MainScreen.this, LoginScreen.class));
+                                Intent intent = new Intent(MainScreen.this, LoginScreen.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
                                 finish();
                                 break;
                         }
@@ -221,9 +245,87 @@ public class MainScreen extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
     }
 
+    private Result getAccessToken() {
+        Result res = new Result();
+        String app_secret = "3b6b744be34947288b4c6b3109212a80";
+        String method = "jimi.oauth.token.get";
+        String app_key = "8FB345B8693CCD0003C1DCAEFEA1FF4B";
+        String sign_method = "md5";
+        String v = "1.0";
+        String format = "json";
+        String user_id = "Joshuaodea";
+        String user_pwd_md5 = "4885ada7d8acf3e71446aa0cb83d120d";
+        String expires_in = "7200";
+
+        SimpleDateFormat gmtDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        gmtDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        //Current Date Time in GMT
+        String timestamp = gmtDateFormat.format(new Date());
+
+        String sign = MD5(app_secret + "app_key" + app_key + "expires_in" + expires_in + "format" + format + "method" +
+                method + "sign_method" + sign_method + "timestamp" + timestamp + "user_id" + user_id + "user_pwd_md5" + user_pwd_md5 +
+                "v" + v + app_secret).toUpperCase();
+
+        Log.d("ACCESS_TOKEN", "" + sign + " " + timestamp);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://open.10000track.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JIMIAPI service = retrofit.create(JIMIAPI.class);
+        service.gpsResult(method, timestamp, app_key, sign, sign_method, v, format, user_id, user_pwd_md5, expires_in).enqueue(new Callback<AccessResult>() {
+            @Override
+            public void onResponse(Call<AccessResult> call, retrofit2.Response<AccessResult> response) {
+                Log.d("ACCESS_TOKEN", "Code : " + response.code() + " | Message : " + response.message());
+                if (response.body() != null)
+                {
+                    Log.d("ACCESS_TOKEN", "" + response.body().code + " " + response.body().message + " " + response.body().result.getAccessToken());
+                    editor = preferences.edit();
+                    editor.putString("access_token", response.body().result.getAccessToken());
+                    editor.commit();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<AccessResult> call, Throwable t) {
+                Log.d("ACCESS_TOKEN", "FAILLLLLLLLLLLLLL!!!!!!!!!!!");
+            }
+        });
+        return res;
+    }
+
+
+    public static String MD5 (String toHash)
+    {
+        try {
+
+            // Static getInstance method is called with hashing MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+
+            // digest() method is called to calculate message digest
+            //  of an input digest() return array of byte
+            byte[] messageDigest = md.digest(toHash.getBytes());
+
+            // Convert byte array into signum representation
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            // Convert message digest into hex value
+            String hashtext = no.toString(16);
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+            return hashtext;
+        }
+
+        // For specifying wrong message digest algorithms
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -537,7 +639,7 @@ public class MainScreen extends AppCompatActivity
         //user credit balance under 2 dollars, dont allow them to ride
         if (Double.valueOf(creditBalance) <= 2.0)
         {
-            Toast.makeText(this, "Your credit balance is too low. You need more than 2AUD to Ride. Proceed to Add Credit Menu.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Your credit balance is too low. You need more than 2$ to Ride. Proceed to Add Credit.", Toast.LENGTH_SHORT).show();
         }
 
         else
@@ -603,5 +705,60 @@ public class MainScreen extends AppCompatActivity
                 e.printStackTrace();
             }
         }
+    }
+
+    public void getTime ()
+    {
+        Long currentTime = System.currentTimeMillis();
+        paramHash = new HashMap<>();
+        paramHash.put("time", currentTime.toString());
+
+        RequestQueue queue = Volley.newRequestQueue(MainScreen.this);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, URL2,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("REPLY_FROM_DB", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("BEE_LOGS10", error.toString());
+                error.printStackTrace();
+            }
+        })
+        {
+            // Ctrl + O
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                if (paramHash == null)
+                {
+                    return null;
+                }
+
+                //moving over all data from HashMap paramHash to Map params
+                Map<String, String> params = new HashMap<>();
+                for (String key:paramHash.keySet())
+                {
+                    params.put(key,paramHash.get(key));
+                }
+                return params;
+            }
+
+            // Ctrl + O
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map <String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        //add request to queue
+        queue.add(stringRequest);
+        Log.d("BEE_LOGS", stringRequest.toString());
     }
 }

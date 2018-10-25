@@ -36,7 +36,8 @@ public class RideHistoryScreen extends AppCompatActivity {
     RequestQueue requestQueue;
     SharedPreferences sharedPreferences;
     private String userID;
-    String tempDate = "";
+    String tempDate = "", tempDate2 = "";
+    boolean doOnce = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class RideHistoryScreen extends AppCompatActivity {
     //function to get transaction history data from database
     private void getRecyclerViewData ()
     {
+
         requestQueue = Volley.newRequestQueue(this);
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Receiving data...");
@@ -85,40 +87,54 @@ public class RideHistoryScreen extends AppCompatActivity {
                                     transactionObject.getString("amount"));
                             Log.d("TEMP2", ""+transactionObject.getString("userID"));
 
-                            //if previous date is different from current object date means need to create new date header
-                            if (!tempDate.equals(transactionObject.getString("transDate")))
+                            if (doOnce)
                             {
-                                tempDate = item.getDate();
-                                ListItems listItem = new ListItems();
-                                //setTag getting value and setObject getting null means this will be a inflated date header
-                                listItem.setTAG((tempDate));
-                                listItem.setObject(null);
-                                lItems.add(listItem);
-
-                                //setTag getting null and setObject getting object means this will be an inflated cardview
-                                ListItems listItem2 = new ListItems();
-                                listItem2.setObject(item);
-                                listItem2.setTAG(null);
-                                lItems.add(listItem2);
-
-                                Log.d("RH1", ""+tempDate);
-                                Log.d("RH3", ""+transactionObject.getString("transDate"));
+                                tempDate2 = transactionObject.getString("transDate");
+                                tempDate = tempDate2;
+                                doOnce = false;
                             }
-                            //current object date is the same as previous object date so can just add it under the same header
+
                             else
+                                tempDate = transactionObject.getString("transDate");
+
+                            //if previous date is different from current object date means need to create new date header
+                            if (tempDate.equals(tempDate2))//(transactionObject.getString("transDate")))
                             {
-                                tempDate = item.getDate();
                                 ListItems listItems = new ListItems();
                                 listItems.setObject(item);
                                 listItems.setTAG(null);
                                 lItems.add(listItems);
-                                Log.d("RH2", "RH2");
-                            }
 
+                                if (i == response.length()-1)
+                                {
+                                    ListItems listItem0 = new ListItems();
+                                    //setTag getting value and setObject getting null means this will be a inflated date header
+                                    listItem0.setTAG((tempDate2));
+                                    listItem0.setObject(null);
+                                    lItems.add(listItem0);
+                                }
+                            }
+                            //current object date is the same as previous object date so can just add it under the same header
+                            else if (!tempDate.equals(tempDate2))
+                            {
+                                ListItems listItem0 = new ListItems();
+                                //setTag getting value and setObject getting null means this will be a inflated date header
+                                listItem0.setTAG((tempDate2));
+                                listItem0.setObject(null);
+                                lItems.add(listItem0);
+                                tempDate2 = tempDate;
+                                ListItems listItem = new ListItems();
+                                //setTag getting value and setObject getting null means this will be a inflated date header
+                                listItem.setObject(item);
+                                listItem.setTAG(null);
+                                lItems.add(listItem);
+                            }
                         }
                     }
 
-                    mAdapter = new MyAdapter (lItems, getApplicationContext());
+                    List<ListItems> newList;
+                    newList = reverseList(lItems);
+                    mAdapter = new MyAdapter (newList, getApplicationContext());
                     mRecyclerView.setAdapter(mAdapter);
 
                 } catch (JSONException e) {
@@ -136,5 +152,15 @@ public class RideHistoryScreen extends AppCompatActivity {
         requestQueue.add(jsonArrayRequest);
     }
 
+    public static List<ListItems> reverseList (List<ListItems> unreversedList)
+    {
+        List <ListItems> tempList = new ArrayList<>();
+        for (int i = unreversedList.size()-1; i>=0; i--)
+        {
+            tempList.add(unreversedList.get(i));
+        }
+
+        return tempList;
+    }
 
 }

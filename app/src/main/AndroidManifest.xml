@@ -91,7 +91,8 @@
 
         <activity android:name=".RideSummaryScreen" />
 
-        <activity android:name=".LoginScreen" />
+        <activity android:name=".LoginScreen"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".LoggingIn" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity android:name=".Register" />
         <activity android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
